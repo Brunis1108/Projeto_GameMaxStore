@@ -44,7 +44,7 @@
             <div class="container">
                 <h1>Novos Pacotes Chegaram!</h1>
                 <p>Aproveite as ofertas exclusivas e turbine sua experiência no jogo.</p>
-                <a href="l" class="btn btn-call-to-action">Ver Ofertas Agora!</a>
+                <a href="loja.php" class="btn btn-call-to-action">Ver Ofertas Agora!</a>
             </div>
         </section>
 
