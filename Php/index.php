@@ -19,7 +19,7 @@
             </div>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="#">Loja</a></li>
+                    <li><a href="loja.php">Loja</a></li>
                     <li><a href="#">Meus Itens</a></li>
                     <li><a href="#">Amigos</a></li>
                     <li><a href="#">Suporte</a></li>
@@ -54,7 +54,7 @@
                 <div class="product-card promotion">
                     <span class="promo-badge">-30%</span>
                     <img src="../img/pacote_lendario.png" alt="Pacote Lendário">
-                    <h3>Pacote Lendário</h3>
+                    <h3>Pacote Lendário Hall Of Legends 2025 Uzi</h3>
                     <p class="price">De: <del>R$ 150,00</del> Por: R$ 105,00</p>
                     <p class="coins-price">10.500 Moedas</p>
                     <a href="#" class="btn btn-buy" data-pacote="Pacote Lendário" data-preco="105.00">Comprar</a>
@@ -62,7 +62,7 @@
                 <div class="product-card promotion">
                     <span class="promo-badge">-20%</span>
                     <img src="../img/skin.jpg" alt="Skin Exclusiva">
-                    <h3>Skin Exclusiva</h3>
+                    <h3>Skin Exclusiva Volibear: Urso dos Mil Flagelos</h3>
                     <p class="price">De: <del>R$ 80,00</del> Por: R$ 64,00</p>
                     <p class="coins-price">6.400 Moedas</p>
                     <a href="#" class="btn btn-buy" data-pacote="Skin Exclusiva" data-preco="64.00">Comprar</a>
@@ -70,7 +70,7 @@
                 <div class="product-card promotion">
                     <span class="promo-badge">-15%</span>
                     <img src="../img/kit_inicial.png" alt="Kit Inicial">
-                    <h3>Kit Inicial</h3>
+                    <h3>Kit Jogador Inicial</h3>
                     <p class="price">De: <del>R$ 50,00</del> Por: R$ 42,50</p>
                     <p class="coins-price">4.250 Moedas</p>
                     <a href="#" class="btn btn-buy" data-pacote="Kit Inicial" data-preco="42.50">Comprar</a>
@@ -83,21 +83,21 @@
             <div class="product-grid">
                 <div class="product-card">
                     <img src="../img/arma.jpeg" alt="Arma Épica">
-                    <h3>Arma Épica</h3>
+                    <h3>Arma Épica Sakura Vandal</h3>
                     <p class="price">R$ 120,00</p>
                     <p class="coins-price">12.000 Moedas</p>
                     <a href="#" class="btn btn-buy" data-pacote="Arma Épica" data-preco="120.00">Comprar</a>
                 </div>
                 <div class="product-card">
                     <img src="../img/emote.jpeg" alt="Emote Raro">
-                    <h3>Emote Raro</h3>
+                    <h3>Emote Raro "Ok" Rammus</h3>
                     <p class="price">R$ 30,00</p>
                     <p class="coins-price">3.000 Moedas</p>
                     <a href="#" class="btn btn-buy" data-pacote="Emote Raro" data-preco="30.00">Comprar</a>
                 </div>
                 <div class="product-card">
                     <img src="../img/pacote_skin.png" alt="Pacote de Skin">
-                    <h3>Pacote de Skin</h3>
+                    <h3>Pacote de Skin Luz e Escuridão - Hecarim, Kalista, Yuumi</h3>
                     <p class="price">R$ 75,00</p>
                     <p class="coins-price">7.500 Moedas</p>
                     <a href="#" class="btn btn-buy" data-pacote="Pacote de Skin" data-preco="75.00">Comprar</a>
