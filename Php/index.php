@@ -57,7 +57,7 @@
                     <h3>Pacote Lendário</h3>
                     <p class="price">De: <del>R$ 150,00</del> Por: R$ 105,00</p>
                     <p class="coins-price">10.500 Moedas</p>
-                    <a href="#" class="btn btn-buy">Comprar</a>
+                    <a href="#" class="btn btn-buy" data-pacote="Pacote Lendário" data-preco="105.00">Comprar</a>
                 </div>
                 <div class="product-card promotion">
                     <span class="promo-badge">-20%</span>
@@ -65,7 +65,7 @@
                     <h3>Skin Exclusiva</h3>
                     <p class="price">De: <del>R$ 80,00</del> Por: R$ 64,00</p>
                     <p class="coins-price">6.400 Moedas</p>
-                    <a href="#" class="btn btn-buy">Comprar</a>
+                    <a href="#" class="btn btn-buy" data-pacote="Skin Exclusiva" data-preco="64.00">Comprar</a>
                 </div>
                 <div class="product-card promotion">
                     <span class="promo-badge">-15%</span>
@@ -73,7 +73,7 @@
                     <h3>Kit Inicial</h3>
                     <p class="price">De: <del>R$ 50,00</del> Por: R$ 42,50</p>
                     <p class="coins-price">4.250 Moedas</p>
-                    <a href="#" class="btn btn-buy">Comprar</a>
+                    <a href="#" class="btn btn-buy" data-pacote="Kit Inicial" data-preco="42.50">Comprar</a>
                 </div>
             </div>
         </section>
@@ -86,23 +86,21 @@
                     <h3>Arma Épica</h3>
                     <p class="price">R$ 120,00</p>
                     <p class="coins-price">12.000 Moedas</p>
-                    <a href="#" class="btn btn-buy"
-                        data-pacote="Arma Épica"
-                        data-preco="120.00">Comprar</a>
+                    <a href="#" class="btn btn-buy" data-pacote="Arma Épica" data-preco="120.00">Comprar</a>
                 </div>
                 <div class="product-card">
                     <img src="https://via.placeholder.com/300x200?text=Emote+Raro" alt="Emote Raro">
                     <h3>Emote Raro</h3>
                     <p class="price">R$ 30,00</p>
                     <p class="coins-price">3.000 Moedas</p>
-                    <a href="#" class="btn btn-buy" data-pacote="Pacote Lendário"data-preco="105.00">Comprar</a>
+                    <a href="#" class="btn btn-buy" data-pacote="Emote Raro" data-preco="30.00">Comprar</a>
                 </div>
                 <div class="product-card">
                     <img src="https://via.placeholder.com/300x200?text=Pacote+de+Boost" alt="Pacote de Boost">
                     <h3>Pacote de Boost</h3>
                     <p class="price">R$ 75,00</p>
                     <p class="coins-price">7.500 Moedas</p>
-                    <a href="#" class="btn btn-buy">Comprar</a>
+                    <a href="#" class="btn btn-buy" data-pacote="Pacote de Boost" data-preco="75.00">Comprar</a>
                 </div>
             </div>
         </section>
@@ -132,6 +130,37 @@
             document.querySelector('.main-nav').classList.toggle('active');
         });
     </script>
+    <script>
+        document.querySelectorAll('.btn-buy').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const pacote = this.dataset.pacote;
+                const preco = this.dataset.preco;
+                let email = this.dataset.email || '';
+
+                const confirmacao = confirm(`Certeza que deseja comprar o pacote "${pacote}" por R$ ${preco}?`);
+
+                if (confirmacao) {
+                    fetch('registrar_compra.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                pacote: pacote,
+                                preco: preco,
+                                email: email
+                            })
+                        })
+                        .then(response => response.text())
+                        .then(msg => alert(msg))
+                        .catch(err => alert('Erro ao registrar compra.'));
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>
