@@ -53,7 +53,7 @@
             <div class="product-grid">
                 <div class="product-card promotion">
                     <span class="promo-badge">-30%</span>
-                    <img src="https://via.placeholder.com/300x200?text=Pacote+Lendario" alt="Pacote Lendário">
+                    <img src="../img/pacote_lendario.png" alt="Pacote Lendário">
                     <h3>Pacote Lendário</h3>
                     <p class="price">De: <del>R$ 150,00</del> Por: R$ 105,00</p>
                     <p class="coins-price">10.500 Moedas</p>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="product-card promotion">
                     <span class="promo-badge">-20%</span>
-                    <img src="https://via.placeholder.com/300x200?text=Skin+Exclusiva" alt="Skin Exclusiva">
+                    <img src="../img/skin.jpg" alt="Skin Exclusiva">
                     <h3>Skin Exclusiva</h3>
                     <p class="price">De: <del>R$ 80,00</del> Por: R$ 64,00</p>
                     <p class="coins-price">6.400 Moedas</p>
@@ -69,7 +69,7 @@
                 </div>
                 <div class="product-card promotion">
                     <span class="promo-badge">-15%</span>
-                    <img src="https://via.placeholder.com/300x200?text=Kit+Inicial" alt="Kit Inicial">
+                    <img src="../img/kit_inicial.png" alt="Kit Inicial">
                     <h3>Kit Inicial</h3>
                     <p class="price">De: <del>R$ 50,00</del> Por: R$ 42,50</p>
                     <p class="coins-price">4.250 Moedas</p>
@@ -82,25 +82,25 @@
             <h2><i class="fas fa-star"></i> Novidades na Loja</h2>
             <div class="product-grid">
                 <div class="product-card">
-                    <img src="https://via.placeholder.com/300x200?text=Arma+Epica" alt="Arma Épica">
+                    <img src="../img/arma.jpeg" alt="Arma Épica">
                     <h3>Arma Épica</h3>
                     <p class="price">R$ 120,00</p>
                     <p class="coins-price">12.000 Moedas</p>
                     <a href="#" class="btn btn-buy" data-pacote="Arma Épica" data-preco="120.00">Comprar</a>
                 </div>
                 <div class="product-card">
-                    <img src="https://via.placeholder.com/300x200?text=Emote+Raro" alt="Emote Raro">
+                    <img src="../img/emote.jpeg" alt="Emote Raro">
                     <h3>Emote Raro</h3>
                     <p class="price">R$ 30,00</p>
                     <p class="coins-price">3.000 Moedas</p>
                     <a href="#" class="btn btn-buy" data-pacote="Emote Raro" data-preco="30.00">Comprar</a>
                 </div>
                 <div class="product-card">
-                    <img src="https://via.placeholder.com/300x200?text=Pacote+de+Boost" alt="Pacote de Boost">
-                    <h3>Pacote de Boost</h3>
+                    <img src="../img/pacote_skin.png" alt="Pacote de Skin">
+                    <h3>Pacote de Skin</h3>
                     <p class="price">R$ 75,00</p>
                     <p class="coins-price">7.500 Moedas</p>
-                    <a href="#" class="btn btn-buy" data-pacote="Pacote de Boost" data-preco="75.00">Comprar</a>
+                    <a href="#" class="btn btn-buy" data-pacote="Pacote de Skin" data-preco="75.00">Comprar</a>
                 </div>
             </div>
         </section>
