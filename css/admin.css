@@ -1,0 +1,387 @@
+/* admin.css - AJUSTADO */
+
+/* Variáveis CSS para fácil personalização (reutilizadas do style.css) */
+:root {
+    --primary-color: #007bff; /* Azul vibrante */
+    --secondary-color: #6c757d; /* Cinza neutro */
+    --accent-color: #28a745; /* Verde para sucesso/compra */
+    --danger-color: #dc3545; /* Vermelho para erro/perigo */
+    --background-dark: #1a1a2e; /* Fundo escuro principal */
+    --background-light: #2e2e4a; /* Fundo secundário */
+    --text-color-light: #f0f0f0; /* Texto claro */
+    --text-color-dark: #333; /* Texto escuro */
+    --card-background: #25253f; /* Fundo dos cards */
+    --border-color: #444; /* Cor da borda */
+    --font-main: 'Roboto', sans-serif;
+    --font-accent: 'Press Start 2P', cursive; /* Fonte para títulos de jogo */
+}
+
+/* Ajustes gerais para o tema admin */
+body {
+    background-color: #121212; /* Fundo mais escuro para o admin */
+    color: var(--text-color-light); /* Garante cor do texto padrão */
+    font-family: var(--font-main); /* Garante fonte padrão */
+}
+
+.admin-header {
+    background-color: #1e1e1e;
+    border-bottom-color: #333;
+}
+
+.admin-header .logo a {
+    color: #00e676; /* Verde vibrante para o logo admin */
+}
+
+.admin-nav a {
+    color: #ccc;
+}
+
+.admin-nav a:hover {
+    color: #00e676;
+}
+
+.admin-nav a::after {
+    background-color: #00e676;
+}
+
+.admin-actions .admin-name {
+    background-color: #2a2a2a;
+    color: #00e676;
+    padding: 8px 15px; /* Adicionado padding para melhor visual */
+    border-radius: 20px; /* Adicionado border-radius */
+    display: flex; /* Para alinhar ícone e texto */
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-main {
+    padding: 30px 0;
+}
+
+.admin-page-title {
+    font-family: var(--font-accent);
+    font-size: 2.5em;
+    color: #00e676;
+    text-align: center;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    text-shadow: 2px 2px 5px rgba(0, 230, 118, 0.2);
+    word-break: break-word; /* Garante que o título quebre a linha se for muito longo */
+}
+
+.admin-page-title i {
+    color: var(--text-color-light);
+}
+
+/* Summary Cards */
+.admin-summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.summary-card {
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+    min-width: 0; /* Permite que o item encolha */
+}
+
+.summary-card:hover {
+    transform: translateY(-5px);
+}
+
+.summary-card .card-icon {
+    font-size: 2.5em;
+    color: #00e676;
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 50%;
+    flex-shrink: 0; /* Impede que o ícone encolha */
+}
+
+.summary-card h3 {
+    font-size: 1.2em;
+    color: #ccc;
+    margin-bottom: 5px;
+    word-break: break-word; /* Garante que o texto quebre a linha */
+}
+
+.summary-card .metric-value {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: var(--text-color-light);
+    word-break: break-all; /* Quebra números longos */
+}
+
+.summary-card .metric-change {
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    word-break: break-word; /* Garante que o texto quebre a linha */
+}
+
+.summary-card .metric-change.positive {
+    color: #28a745; /* Verde */
+}
+
+.summary-card .metric-change.negative {
+    color: #dc3545; /* Vermelho */
+}
+
+/* Charts Section */
+.admin-charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.chart-card {
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    height: 400px; /* Altura fixa para os gráficos */
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Permite que o item encolha */
+}
+
+.chart-card h3 {
+    margin: 0;
+    font-size: 1em;
+    color: #00e676;
+    margin-bottom: 10px;
+    text-align: center;
+    word-break: break-word; /* Garante que o título quebre a linha */
+}
+
+.chart-card canvas {
+    flex-grow: 1; /* Permite que o canvas ocupe o espaço restante */
+    max-width: 100%; /* Garante que o canvas não transborde */
+    height: auto; /* Mantém a proporção */
+}
+
+/* Data Tables */
+.admin-data-tables {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.data-table-card {
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    overflow-x: auto; /* Adiciona scroll horizontal se a tabela for muito larga */
+    min-width: 0; /* Permite que o item encolha */
+}
+
+.data-table-card h3 {
+    font-size: 1.5em;
+    color: #00e676;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    word-break: break-word; /* Garante que o título quebre a linha */
+}
+
+.data-table-card table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-color-light);
+    min-width: 400px; /* Garante uma largura mínima para a tabela */
+}
+
+.data-table-card th,
+.data-table-card td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #3a3a3a;
+    white-space: nowrap; /* Impede que o conteúdo da célula quebre a linha por padrão */
+    overflow: hidden; /* Esconde o conteúdo que transborda */
+    text-overflow: ellipsis; /* Adiciona reticências para conteúdo cortado */
+    max-width: 200px; /* Limita a largura máxima da célula para evitar transbordamento */
+}
+
+.data-table-card th {
+    background-color: #3a3a3a;
+    font-weight: bold;
+    color: #ccc;
+}
+
+.data-table-card tbody tr:hover {
+    background-color: #333;
+}
+
+/* Quick Actions */
+.admin-quick-actions h2 {
+    font-family: var(--font-accent);
+    font-size: 2em;
+    color: #00e676;
+    text-align: center;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    word-break: break-word; /* Garante que o título quebre a linha */
+}
+
+.action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+}
+
+.action-card {
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    color: var(--text-color-light);
+    min-width: 0; /* Permite que o item encolha */
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+    background-color: #3a3a3a;
+}
+
+.action-card i {
+    font-size: 3em;
+    color: #00e676;
+    flex-shrink: 0; /* Impede que o ícone encolha */
+}
+
+.action-card span {
+    font-size: 1.1em;
+    font-weight: bold;
+    word-break: break-word; /* Garante que o texto quebre a linha */
+}
+
+/* Footer Admin */
+.admin-footer {
+    background-color: #1e1e1e;
+    border-top-color: #333;
+    margin-top: 30px;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+    .admin-charts-section,
+    .admin-data-tables {
+        grid-template-columns: 1fr; /* Uma coluna em tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-header .container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .admin-nav {
+        display: none; /* Esconde a navegação por padrão */
+        width: 100%;
+        flex-direction: column;
+        background-color: #1e1e1e;
+        position: absolute;
+        top: 70px; /* Ajuste conforme a altura do seu header */
+        left: 0;
+        padding: 20px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        z-index: 100;
+    }
+
+    .admin-nav.active {
+        display: flex; /* Mostra a navegação quando ativa */
+    }
+
+    .admin-nav ul {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .admin-nav a {
+        font-size: 1.2em;
+    }
+
+    .admin-actions {
+        display: none; /* Esconde as ações do usuário no menu principal em mobile */
+    }
+
+    .menu-toggle {
+        display: block; /* Mostra o botão de menu em telas menores */
+    }
+
+    .admin-page-title {
+        font-size: 2em;
+    }
+
+    .admin-summary-cards,
+    .admin-charts-section,
+    .admin-data-tables,
+    .action-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-card {
+        height: 350px;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-page-title {
+        font-size: 1.8em;
+    }
+
+    .summary-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .summary-card .card-icon {
+        margin-bottom: 10px;
+    }
+
+    .data-table-card {
+        padding: 15px;
+    }
+
+    .data-table-card th,
+    .data-table-card td {
+        padding: 8px 10px;
+        font-size: 0.9em;
+    }
+}
+
+#dailySalesChart , #revenueByCategoryChart{
+    display: flex;
+    justify-content: center;
+    height: 300px;
+    padding: 25px;
+}

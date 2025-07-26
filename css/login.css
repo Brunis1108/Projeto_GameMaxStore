@@ -1,0 +1,90 @@
+/* Estilos do Header */
+.main-header {
+    background-color: var(--background-light);
+    padding: 10px 0; 
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas menores */
+}
+
+.main-header .logo a {
+    font-family: var(--font-accent);
+    font-size: 1.5em; /* Diminuindo o tamanho da fonte do logo */
+    color: var(--primary-color);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilos da Seção de Login */
+.login-section {
+    padding: 80px 0; /* Aumentando o espaço ao redor da seção de login */
+    text-align: center;
+    background-color: var(--background-light);
+}
+
+.login-section h1 {
+    font-family: var(--font-accent);
+    font-size: 3em; /* Aumentando o tamanho do título */
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.login-form {
+    background-color: var(--card-background);
+    padding: 30px; /* Aumentando o padding do formulário */
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3); /* Aumentando a sombra para um efeito mais suave */
+    display: inline-block; /* Para centralizar o formulário */
+    max-width: 400px; /* Definindo uma largura máxima para o formulário */
+    width: 100%; /* Para que o formulário ocupe 100% da largura disponível até o máximo */
+}
+
+.form-group {
+    margin-bottom: 20px; /* Aumentando o espaço entre os campos */
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px; /* Aumentando o padding dos campos de entrada */
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--background-dark);
+    color: var(--text-color-light);
+    font-size: 1em; /* Aumentando o tamanho da fonte */
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 25px; /* Aumentando o padding dos botões */
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+    border: none;
+    font-size: 1em; /* Aumentando o tamanho da fonte do botão */
+}
+
+.register-link {
+    margin-top: 20px; /* Aumentando o espaço acima do link de registro */
+    color: var(--text-color-light);
+}
+
+.register-link a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+

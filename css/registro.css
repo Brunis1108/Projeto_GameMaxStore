@@ -1,0 +1,120 @@
+/* register.css */
+
+/* Estilos para a página de autenticação (cadastro/login) */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 140px); /* Altura da viewport menos header e footer */
+    padding: 40px 20px;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://via.placeholder.com/1920x1080?text=Fundo+Auth') no-repeat center center/cover;
+    background-attachment: fixed; /* Fundo fixo para efeito parallax */
+}
+.auth-container {
+    background-color: var(--card-background); /* Reutiliza a cor de fundo dos cards */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.auth-container h2 {
+    font-family: var(--font-accent);
+    font-size: 25px;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.auth-container h2 i {
+    color: var(--text-color-light);
+}
+
+.auth-form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.auth-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--text-color-light);
+    font-size: 1.1em;
+}
+
+.auth-form input[type="email"],
+.auth-form input[type="text"],
+.auth-form input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: #3a3a5a; /* Um pouco mais claro que o fundo */
+    color: var(--text-color-light);
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-form input[type="email"]::placeholder,
+.auth-form input[type="text"]::placeholder,
+.auth-form input[type="password"]::placeholder {
+    color: #aaa;
+}
+
+.auth-form input[type="email"]:focus,
+.auth-form input[type="text"]:focus,
+.auth-form input[type="password"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.auth-form .btn-call-to-action {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
+.auth-link {
+    margin-top: 25px;
+    font-size: 1em;
+    color: var(--text-color-light);
+}
+
+.auth-link a {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+/* Responsividade para o formulário */
+@media (max-width: 600px) {
+    .auth-container {
+        padding: 30px 20px;
+        margin: 0 15px; /* Adiciona margem nas laterais para telas muito pequenas */
+    }
+
+    .auth-container h2 {
+        font-size: 1.8em;
+    }
+
+    .auth-form input {
+        padding: 10px 12px;
+    }
+
+    .auth-form .btn-call-to-action {
+        padding: 12px;
+        font-size: 1.1em;
+    }
+}

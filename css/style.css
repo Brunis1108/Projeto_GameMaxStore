@@ -1,0 +1,428 @@
+/* Variáveis CSS para fácil personalização */
+:root {
+    --primary-color: #007bff; /* Azul vibrante */
+    --secondary-color: #6c757d; /* Cinza neutro */
+    --accent-color: #28a745; /* Verde para sucesso/compra */
+    --danger-color: #dc3545; /* Vermelho para erro/perigo */
+    --background-dark: #1a1a2e; /* Fundo escuro principal */
+    --background-light: #2e2e4a; /* Fundo secundário */
+    --text-color-light: #f0f0f0; /* Texto claro */
+    --text-color-dark: #333; /* Texto escuro */
+    --card-background: #25253f; /* Fundo dos cards */
+    --border-color: #444; /* Cor da borda */
+    --font-main: 'Roboto', sans-serif;
+    --font-accent: 'Press Start 2P', cursive; /* Fonte para títulos de jogo */
+}
+
+/* Reset Básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--background-dark);
+    color: var(--text-color-light);
+    line-height: 1.6;
+    overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Botões */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: var(--text-color-light);
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn-call-to-action {
+    background-color: var(--accent-color);
+    color: var(--text-color-light);
+    font-size: 1.1em;
+    padding: 12px 25px;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-call-to-action:hover {
+    background-color: #218838;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-buy {
+    background-color: var(--accent-color);
+    color: var(--text-color-light);
+    padding: 8px 15px;
+    font-size: 0.9em;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-buy:hover {
+    background-color: #218838;
+}
+
+/* Header */
+.main-header {
+    background-color: var(--background-light);
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas menores */
+}
+
+.main-header .logo a {
+    font-family: var(--font-accent);
+    font-size: 1.8em;
+    color: var(--primary-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.main-nav ul {
+    display: flex;
+    gap: 25px;
+}
+
+.main-nav a {
+    color: var(--text-color-light);
+    font-weight: bold;
+    font-size: 1.05em;
+    padding: 5px 0;
+    position: relative;
+}
+
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.main-nav a:hover::after {
+    width: 100%;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-balance {
+    background-color: #3a3a5a;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffd700; /* Cor de ouro para moedas */
+}
+
+.user-balance i {
+    color: #ffd700;
+}
+
+.menu-toggle {
+    display: none; /* Esconde por padrão em telas maiores */
+    background: none;
+    border: none;
+    color: var(--text-color-light);
+    font-size: 1.8em;
+    cursor: pointer;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://via.placeholder.com/1920x600?text=Fundo+do+Jogo') no-repeat center center/cover;
+    text-align: center;
+    padding: 100px 20px;
+    color: var(--text-color-light);
+    margin-bottom: 40px;
+    box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.hero-section h1 {
+    font-family: var(--font-accent);
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+.hero-section p {
+    font-size: 1.3em;
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Seções de Produtos */
+section {
+    padding: 40px 0;
+}
+
+section h2 {
+    font-family: var(--font-accent);
+    font-size: 2.2em;
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+section h2 i {
+    color: var(--text-color-light);
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.product-card {
+    background-color: var(--card-background);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    padding-bottom: 20px;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.product-card h3 {
+    font-size: 1.5em;
+    margin: 15px 0 10px;
+    color: var(--primary-color);
+}
+
+.product-card .price {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--text-color-light);
+    margin-bottom: 5px;
+}
+
+.product-card .price del {
+    color: var(--secondary-color);
+    font-size: 0.9em;
+}
+
+.product-card .coins-price {
+    font-size: 1.1em;
+    color: #ffd700; /* Cor de ouro para moedas */
+    font-weight: bold;
+}
+
+.promo-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: var(--danger-color);
+    color: var(--text-color-light);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    z-index: 10;
+}
+
+/* Footer */
+.main-footer {
+    background-color: var(--background-light);
+    color: var(--text-color-light);
+    padding: 30px 0;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    margin-top: 50px;
+}
+
+.main-footer .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.footer-links a {
+    color: var(--text-color-light);
+    font-size: 0.95em;
+}
+
+.footer-links a:hover {
+    color: var(--primary-color);
+}
+
+.social-media {
+    display: flex;
+    gap: 20px;
+    font-size: 1.5em;
+}
+
+.social-media a {
+    color: var(--text-color-light);
+    transition: color 0.3s ease;
+}
+
+.social-media a:hover {
+    color: var(--primary-color);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .main-header .container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .main-nav {
+        display: none; /* Esconde a navegação por padrão */
+        width: 100%;
+        flex-direction: column;
+        background-color: var(--background-light);
+        position: absolute;
+        top: 70px; /* Ajuste conforme a altura do seu header */
+        left: 0;
+        padding: 20px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        z-index: 100;
+    }
+
+    .main-nav.active {
+        display: flex; /* Mostra a navegação quando ativa */
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .main-nav a {
+        font-size: 1.2em;
+    }
+
+    .user-actions {
+        display: none; /* Esconde as ações do usuário no menu principal em mobile */
+    }
+
+    .menu-toggle {
+        display: block; /* Mostra o botão de menu em telas menores */
+    }
+
+    .hero-section h1 {
+        font-size: 2.5em;
+    }
+
+    .hero-section p {
+        font-size: 1em;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .main-footer .container {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-header .logo a {
+        font-size: 1.5em;
+    }
+
+    .hero-section h1 {
+        font-size: 2em;
+    }
+
+    section h2 {
+        font-size: 1.8em;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr; /* Uma coluna em telas muito pequenas */
+    }
+}
