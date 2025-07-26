@@ -9,7 +9,7 @@ $dataHora = date('Y-m-d H:i:s');
 
 $linha = "[$dataHora] Pacote: $pacote | Preço: R$ $preco | Email: " . ($email ?: 'Não informado') . PHP_EOL;
 
-file_put_contents('compras.txt', $linha, FILE_APPEND);
+file_put_contents('Banco/compras.txt', $linha, FILE_APPEND);
 
 echo "Compra registrada com sucesso!";
 ?>

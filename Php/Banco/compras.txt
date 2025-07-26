@@ -1,0 +1,3 @@
+[2025-07-26 17:05:26] Pacote: Pacote Lendário | Preço: R$ 105.00 | Email: Não informado
+[2025-07-26 17:10:38] Pacote: Kit Inicial | Preço: R$ 42.50 | Email: Não informado
+[2025-07-26 17:16:36] Pacote: Pacote Lendário | Preço: R$ 105.00 | Email: Não informado
