@@ -23,7 +23,7 @@
                     <li><a href="admin-products.html"><i class="fas fa-box"></i> Produtos</a></li>
                     <li><a href="admin-promotions.html"><i class="fas fa-tags"></i> Promoções</a></li>
                     <li><a href="admin-users.html"><i class="fas fa-users"></i> Usuários</a></li>
-                    <li><a href="admin-reports.html"><i class="fas fa-chart-line"></i> Relatórios</a></li>
+                    <li><a href="admin-reports.php"><i class="fas fa-chart-line"></i> Relatórios</a></li>
                     <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Configurações</a></li>
                 </ul>
             </nav>
