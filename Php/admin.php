@@ -135,6 +135,11 @@ $novos_usuarios = "N/A"; // Ou 0 se não houver dados
     <!-- Biblioteca de Gráficos (ex: Chart.js) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+<style>
+    .summary-card .metric-value {
+    font-size: 30px;
+}
+</style>
 <body>
     <header class="main-header admin-header">
         <div class="container">
