@@ -1,17 +1,28 @@
 /* Variáveis CSS para fácil personalização */
 :root {
-    --primary-color: #007bff; /* Azul vibrante */
-    --secondary-color: #6c757d; /* Cinza neutro */
-    --accent-color: #28a745; /* Verde para sucesso/compra */
-    --danger-color: #dc3545; /* Vermelho para erro/perigo */
-    --background-dark: #1a1a2e; /* Fundo escuro principal */
-    --background-light: #2e2e4a; /* Fundo secundário */
-    --text-color-light: #f0f0f0; /* Texto claro */
-    --text-color-dark: #333; /* Texto escuro */
-    --card-background: #25253f; /* Fundo dos cards */
-    --border-color: #444; /* Cor da borda */
+    --primary-color: #007bff;
+    /* Azul vibrante */
+    --secondary-color: #6c757d;
+    /* Cinza neutro */
+    --accent-color: #28a745;
+    /* Verde para sucesso/compra */
+    --danger-color: #dc3545;
+    /* Vermelho para erro/perigo */
+    --background-dark: #1a1a2e;
+    /* Fundo escuro principal */
+    --background-light: #2e2e4a;
+    /* Fundo secundário */
+    --text-color-light: #f0f0f0;
+    /* Texto claro */
+    --text-color-dark: #333;
+    /* Texto escuro */
+    --card-background: #25253f;
+    /* Fundo dos cards */
+    --border-color: #444;
+    /* Cor da borda */
     --font-main: 'Roboto', sans-serif;
-    --font-accent: 'Press Start 2P', cursive; /* Fonte para títulos de jogo */
+    --font-accent: 'Press Start 2P', cursive;
+    /* Fonte para títulos de jogo */
 }
 
 /* Reset Básico */
@@ -26,7 +37,8 @@ body {
     background-color: var(--background-dark);
     color: var(--text-color-light);
     line-height: 1.6;
-    overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+    overflow-x: hidden;
+    /* Evita rolagem horizontal indesejada */
 }
 
 .container {
@@ -97,12 +109,16 @@ ul {
 }
 
 .btn-buy {
-    background-color: var(--accent-color);
-    color: var(--text-color-light);
-    padding: 8px 15px;
-    font-size: 0.9em;
-    width: 100%;
-    margin-top: 10px;
+    background-color: #27ae60;
+    color: #fff;
+    padding: 0.8rem 1rem;
+    margin: 0 1rem;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .btn-buy:hover {
@@ -121,7 +137,8 @@ ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas menores */
+    flex-wrap: wrap;
+    /* Permite que os itens quebrem a linha em telas menores */
 }
 
 .main-header .logo a {
@@ -173,7 +190,8 @@ ul {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #ffd700; /* Cor de ouro para moedas */
+    color: #ffd700;
+    /* Cor de ouro para moedas */
 }
 
 .user-balance i {
@@ -181,7 +199,8 @@ ul {
 }
 
 .menu-toggle {
-    display: none; /* Esconde por padrão em telas maiores */
+    display: none;
+    /* Esconde por padrão em telas maiores */
     background: none;
     border: none;
     color: var(--text-color-light);
@@ -250,6 +269,10 @@ section h2 i {
     padding-bottom: 20px;
     position: relative;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 1rem;
 }
 
 .product-card:hover {
@@ -284,7 +307,8 @@ section h2 i {
 
 .product-card .coins-price {
     font-size: 1.1em;
-    color: #ffd700; /* Cor de ouro para moedas */
+    color: #ffd700;
+    /* Cor de ouro para moedas */
     font-weight: bold;
 }
 
@@ -358,12 +382,14 @@ section h2 i {
     }
 
     .main-nav {
-        display: none; /* Esconde a navegação por padrão */
+        display: none;
+        /* Esconde a navegação por padrão */
         width: 100%;
         flex-direction: column;
         background-color: var(--background-light);
         position: absolute;
-        top: 70px; /* Ajuste conforme a altura do seu header */
+        top: 70px;
+        /* Ajuste conforme a altura do seu header */
         left: 0;
         padding: 20px;
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
@@ -371,7 +397,8 @@ section h2 i {
     }
 
     .main-nav.active {
-        display: flex; /* Mostra a navegação quando ativa */
+        display: flex;
+        /* Mostra a navegação quando ativa */
     }
 
     .main-nav ul {
@@ -385,11 +412,13 @@ section h2 i {
     }
 
     .user-actions {
-        display: none; /* Esconde as ações do usuário no menu principal em mobile */
+        display: none;
+        /* Esconde as ações do usuário no menu principal em mobile */
     }
 
     .menu-toggle {
-        display: block; /* Mostra o botão de menu em telas menores */
+        display: block;
+        /* Mostra o botão de menu em telas menores */
     }
 
     .hero-section h1 {
@@ -423,6 +452,15 @@ section h2 i {
     }
 
     .product-grid {
-        grid-template-columns: 1fr; /* Uma coluna em telas muito pequenas */
+        grid-template-columns: 1fr;
+        /* Uma coluna em telas muito pequenas */
     }
+}
+
+.product-info {
+    flex-grow: 1;
+    padding: 1rem;
+    /* Garante espaçamento interno */
+    display: flex;
+    flex-direction: column;
 }
