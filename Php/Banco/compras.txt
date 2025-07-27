@@ -3,3 +3,7 @@
 [2025-07-26 17:16:36] Pacote: Pacote Lendário | Preço: R$ 105.00 | Email: Não informado
 [2025-07-27 13:32:41] Pacote: Pacote Lendário | Preço: R$ 105.00 | Email: Não informado
 [2025-07-27 14:04:18] Pacote: Pacote Lendário Hall Of Legends 2025 Uzi | Preço: R$ 105,00 | Email: Não informado
+[2025-07-27 14:53:39] Pacote: Pacote Lendário Hall Of Legends 2025 Uzi | Preço: R$ 105,00 | Email: Não informado
+[2025-07-27 14:55:25] Pacote: Skin Exclusiva | Preço: R$ 64.00 | Email: Não informado
+[2025-07-27 14:55:43] Pacote: Kit Inicial | Preço: R$ 42.50 | Email: Não informado
+[2025-07-27 14:56:45] Pacote: Skin Exclusiva | Preço: R$ 64.00 | Email: Não informado
