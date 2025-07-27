@@ -13,7 +13,7 @@
     <header class="main-header">
         <div class="container">
             <div class="logo">
-                <a href="index.html">GameMaxStore</a>
+                <a href="index.php">GameMaxStore</a>
             </div>
             <nav class="main-nav">
                 <ul>
@@ -57,7 +57,7 @@
                 </div>
                 <button type="submit" class="btn btn-call-to-action">Criar Conta</button>
             </form>
-            <p class="auth-link">Já tem uma conta? <a href="login.html">Faça Login aqui!</a></p>
+            <p class="auth-link">Já tem uma conta? <a href="login.php">Faça Login aqui!</a></p>
         </div>
     </main>
 

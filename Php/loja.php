@@ -13,7 +13,7 @@
     <header class="main-header">
         <div class="container">
             <div class="logo">
-                <a href="index.html">GameMaxStore</a>
+                <a href="index.php">GameMaxStore</a>
             </div>
             <nav class="main-nav">
                 <ul>
@@ -24,8 +24,8 @@
                 </ul>
             </nav>
             <div class="user-actions">
-                <a href="login.html" class="btn btn-primary">Login</a>
-                <a href="regsitro.html" class="btn btn-secondary">Cadastre-se</a>
+                <a href="login.php" class="btn btn-primary">Login</a>
+                <a href="registro.php" class="btn btn-secondary">Cadastre-se</a>
                 <span class="user-balance">
                     <i class="fas fa-coins"></i> 10.000 Moedas
                 </span>

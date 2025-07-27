@@ -26,8 +26,8 @@
                 </ul>
             </nav>
             <div class="user-actions">
-                <a href="#" class="btn btn-primary">Login</a>
-                <a href="regsitro.html" class="btn btn-secondary">Cadastre-se</a>
+                <a href="login.php" class="btn btn-primary">Login</a>
+                <a href="registro.php" class="btn btn-secondary">Cadastre-se</a>
                 <span class="user-balance">
                     <i class="fas fa-coins"></i> 10.000 Moedas
                     <a href="#">+</a>
@@ -54,25 +54,38 @@
                 <div class="product-card promotion">
                     <span class="promo-badge">-30%</span>
                     <img src="../img/pacote_lendario.png" alt="Pacote Lendário">
-                    <h3>Pacote Lendário Hall Of Legends 2025 Uzi</h3>
-                    <p class="price">De: <del>R$ 150,00</del> Por: R$ 105,00</p>
-                    <p class="coins-price">10.500 Moedas</p>
-                    <a href="#" class="btn btn-buy" data-pacote="Pacote Lendário" data-preco="105.00">Comprar</a>
+
+                    <div class="product-info">
+                        <h3>Pacote Lendário Hall Of Legends 2025 Uzi</h3>
+                        <p class="price">De: <del>R$ 150,00</del> Por: R$ 105,00</p>
+                        <p class="coins-price">10.500 Moedas</p>
+                    </div>
+
+                    <a href="#" class="btn btn-buy" data-pacote="Pacote Lendário Hall Of Legends 2025 Uzi" data-preco="105,00">Comprar</a>
                 </div>
+
                 <div class="product-card promotion">
                     <span class="promo-badge">-20%</span>
                     <img src="../img/skin.jpg" alt="Skin Exclusiva">
-                    <h3>Skin Exclusiva Volibear: Urso dos Mil Flagelos</h3>
-                    <p class="price">De: <del>R$ 80,00</del> Por: R$ 64,00</p>
-                    <p class="coins-price">6.400 Moedas</p>
+
+                    <div class="product-info">
+                        <h3>Skin Exclusiva Volibear: Urso dos Mil Flagelos</h3>
+                        <p class="price">De: <del>R$ 80,00</del> Por: R$ 64,00</p>
+                        <p class="coins-price">6.400 Moedas</p>
+                    </div>
                     <a href="#" class="btn btn-buy" data-pacote="Skin Exclusiva" data-preco="64.00">Comprar</a>
                 </div>
+
                 <div class="product-card promotion">
                     <span class="promo-badge">-15%</span>
                     <img src="../img/kit_inicial.png" alt="Kit Inicial">
-                    <h3>Kit Jogador Inicial</h3>
-                    <p class="price">De: <del>R$ 50,00</del> Por: R$ 42,50</p>
-                    <p class="coins-price">4.250 Moedas</p>
+
+                    <div class="product-info">
+                        <h3>Kit Jogador Inicial</h3>
+                        <p class="price">De: <del>R$ 50,00</del> Por: R$ 42,50</p>
+                        <p class="coins-price">4.250 Moedas</p>
+                    </div>
+
                     <a href="#" class="btn btn-buy" data-pacote="Kit Inicial" data-preco="42.50">Comprar</a>
                 </div>
             </div>
@@ -83,16 +96,24 @@
             <div class="product-grid">
                 <div class="product-card">
                     <img src="../img/arma.jpeg" alt="Arma Épica">
-                    <h3>Arma Épica Sakura Vandal</h3>
-                    <p class="price">R$ 120,00</p>
-                    <p class="coins-price">12.000 Moedas</p>
+
+                    <div class="product-info">
+                        <h3>Arma Épica Sakura Vandal</h3>
+                        <p class="price">R$ 120,00</p>
+                        <p class="coins-price">12.000 Moedas</p>
+                    </div>
+
                     <a href="#" class="btn btn-buy" data-pacote="Arma Épica" data-preco="120.00">Comprar</a>
                 </div>
                 <div class="product-card">
                     <img src="../img/emote.jpeg" alt="Emote Raro">
-                    <h3>Emote Raro "Ok" Rammus</h3>
-                    <p class="price">R$ 30,00</p>
-                    <p class="coins-price">3.000 Moedas</p>
+
+                    <div class="product-info">
+                        <h3>Emote Raro "Ok" Rammus</h3>
+                        <p class="price">R$ 30,00</p>
+                        <p class="coins-price">3.000 Moedas</p>
+                    </div>
+
                     <a href="#" class="btn btn-buy" data-pacote="Emote Raro" data-preco="30.00">Comprar</a>
                 </div>
                 <div class="product-card">
@@ -124,40 +145,68 @@
         </div>
     </footer>
 
+    <!-- Modal de Confirmação -->
+    <div id="modal-confirmacao" class="modal"> <!-- Remova a classe 'hidden' daqui -->
+        <div class="modal-content">
+            <h2>Confirmar Compra</h2>
+            <p id="mensagem-modal"></p>
+            <div class="modal-actions">
+                <button id="btn-confirmar" class="btn btn-primary">Confirmar</button>
+                <button id="btn-cancelar" class="btn btn-secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // JavaScript para o menu responsivo (exemplo simples)
         document.querySelector('.menu-toggle').addEventListener('click', function() {
             document.querySelector('.main-nav').classList.toggle('active');
         });
-    </script>
-    <script>
+
+
+        let dadosCompra = {};
+        const modal = document.getElementById('modal-confirmacao');
+        const mensagem = document.getElementById('mensagem-modal');
+        const btnConfirmar = document.getElementById('btn-confirmar');
+        const btnCancelar = document.getElementById('btn-cancelar');
+
+        // Ao clicar em qualquer botão de comprar
         document.querySelectorAll('.btn-buy').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
+                // Pega dados do item
+                dadosCompra = {
+                    pacote: this.dataset.pacote,
+                    preco: this.dataset.preco,
+                    email: this.dataset.email || ''
+                };
 
-                const pacote = this.dataset.pacote;
-                const preco = this.dataset.preco;
-                let email = this.dataset.email || '';
-
-                const confirmacao = confirm(`Certeza que deseja comprar o pacote "${pacote}" por R$ ${preco}?`);
-
-                if (confirmacao) {
-                    fetch('registrar_compra.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                            },
-                            body: new URLSearchParams({
-                                pacote: pacote,
-                                preco: preco,
-                                email: email
-                            })
-                        })
-                        .then(response => response.text())
-                        .then(msg => alert(msg))
-                        .catch(err => alert('Erro ao registrar compra.'));
-                }
+                // Atualiza mensagem e abre modal
+                mensagem.textContent = `Deseja realmente comprar o pacote "${dadosCompra.pacote}" por R$ ${dadosCompra.preco}?`;
+                modal.classList.add('active'); // Adiciona a classe 'active' para mostrar o modal
             });
+        });
+
+        // Cancelar compra
+        btnCancelar.addEventListener('click', () => {
+            modal.classList.remove('active'); // Remove a classe 'active' para esconder o modal
+            dadosCompra = {};
+        });
+
+        // Confirmar compra
+        btnConfirmar.addEventListener('click', () => {
+            modal.classList.remove('active'); // Remove a classe 'active' para esconder o modal
+
+            fetch('registrar_compra.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams(dadosCompra)
+                })
+                .then(response => response.text())
+                .then(msg => alert(msg))
+                .catch(() => alert('Erro ao registrar compra.'));
         });
     </script>
 
