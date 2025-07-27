@@ -62,21 +62,19 @@ $nickname = $_SESSION['nickname'];
 
         <!-- Conteúdo adicional da página de usuário, se houver -->
         <section class="promotions-section container">
-            <h2><i class="fas fa-fire"></i> Suas Últimas Compras</h2>
+            <h2><i class="fas fa-fire"></i> Sugestões para Você</h2>
             <div class="product-grid">
                 <!-- Exemplo de card de item comprado -->
                 <div class="product-card">
                     <img src="../img/pacote_lendario.png" alt="Pacote Lendário">
                     <div class="product-info">
                         <h3>Pacote Lendário</h3>
-                        <p class="price">Comprado em: 2023-10-26</p>
                     </div>
                 </div>
                 <div class="product-card">
                     <img src="../img/skin.jpg" alt="Skin Exclusiva">
                     <div class="product-info">
                         <h3>Skin Exclusiva</h3>
-                        <p class="price">Comprado em: 2023-10-20</p>
                     </div>
                 </div>
             </div>
