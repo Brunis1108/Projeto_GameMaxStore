@@ -1,3 +1,127 @@
+<?php
+date_default_timezone_set('America/Sao_Paulo');
+
+// Inicializa arrays para armazenar os dados processados
+$compras = [];
+$total_receita = 0;
+$total_vendas = 0;
+$vendas_por_pacote = [];
+$vendas_por_categoria = [
+    'Skins' => 0,
+    'Pacotes' => 0,
+    'Armas' => 0,
+    'Emotes' => 0,
+    'Boosts' => 0 // Adicione outras categorias conforme necessário
+];
+$vendas_diarias = []; // Para o gráfico de vendas diárias
+
+// Caminho para o arquivo de compras
+$caminho_compras = 'Banco/compras.txt';
+
+if (file_exists($caminho_compras)) {
+    $linhas = file($caminho_compras, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+    foreach ($linhas as $linha) {
+        // Novo padrão de leitura para o formato atual
+        // Exemplo de linha: [2025-07-27 14:04:18] Pacote: Pacote Lendário Hall Of Legends 2025 Uzi | Preço: R$ 105,00 | Email: Não informado
+        preg_match('/\[(.*?)\]\s*Pacote:\s*(.*?)\s*\|\s*Preço:\s*R\$\s*([\d,\.]+)\s*\|\s*Email:\s*(.*)/', $linha, $matches);
+
+        if (count($matches) === 5) {
+            $dataHora = trim($matches[1]);
+            $pacote = trim($matches[2]);
+            $valorStr = trim($matches[3]);
+            $email = trim($matches[4]);
+
+            // Converte para float (cuidado com vírgula para ponto decimal)
+            $valor = floatval(str_replace(',', '.', $valorStr));
+            $data = date('Y-m-d', strtotime($dataHora));
+            $mes_atual = date('Y-m'); // Formato Ano-Mês para filtrar por mês
+
+            // Processa apenas compras do mês atual para "Receita Total (Mês)"
+            if (date('Y-m', strtotime($dataHora)) === $mes_atual) {
+                $total_receita += $valor;
+                $total_vendas++;
+            }
+
+            // Agrega vendas por pacote
+            if (!isset($vendas_por_pacote[$pacote])) {
+                $vendas_por_pacote[$pacote] = ['vendas' => 0, 'receita' => 0];
+            }
+            $vendas_por_pacote[$pacote]['vendas']++;
+            $vendas_por_pacote[$pacote]['receita'] += $valor;
+
+            // Agrega vendas por categoria (simplificado, você pode precisar de uma lógica mais robusta)
+            // Exemplo: se o nome do pacote contém "Skin", "Pacote", "Arma", etc.
+            if (stripos($pacote, 'Skin') !== false) {
+                $vendas_por_categoria['Skins'] += $valor;
+            } elseif (stripos($pacote, 'Pacote') !== false) {
+                $vendas_por_categoria['Pacotes'] += $valor;
+            } elseif (stripos($pacote, 'Arma') !== false) {
+                $vendas_por_categoria['Armas'] += $valor;
+            } elseif (stripos($pacote, 'Emote') !== false) {
+                $vendas_por_categoria['Emotes'] += $valor;
+            } elseif (stripos($pacote, 'Boost') !== false) {
+                $vendas_por_categoria['Boosts'] += $valor;
+            } else {
+                // Categoria padrão ou "Outros"
+                if (!isset($vendas_por_categoria['Outros'])) {
+                    $vendas_por_categoria['Outros'] = 0;
+                }
+                $vendas_por_categoria['Outros'] += $valor;
+            }
+
+            // Agrega vendas diárias para o gráfico
+            if (!isset($vendas_diarias[$data])) {
+                $vendas_diarias[$data] = 0;
+            }
+            $vendas_diarias[$data]++; // Contagem de vendas por dia
+        }
+    }
+}
+
+// Ordena os pacotes mais vendidos
+uasort($vendas_por_pacote, function($a, $b) {
+    return $b['vendas'] <=> $a['vendas'];
+});
+$top_5_pacotes = array_slice($vendas_por_pacote, 0, 5, true);
+
+// Calcula o ticket médio
+$ticket_medio = $total_vendas > 0 ? $total_receita / $total_vendas : 0;
+
+// Prepara dados para o gráfico de vendas diárias (últimos 7 dias)
+$ultimos_7_dias = [];
+for ($i = 6; $i >= 0; $i--) {
+    $data = date('Y-m-d', strtotime("-$i days"));
+    $ultimos_7_dias[$data] = $vendas_diarias[$data] ?? 0;
+}
+$labels_vendas_diarias = json_encode(array_keys($ultimos_7_dias));
+$data_vendas_diarias = json_encode(array_values($ultimos_7_dias));
+
+// Prepara dados para o gráfico de receita por categoria
+$labels_receita_categoria = json_encode(array_keys($vendas_por_categoria));
+$data_receita_categoria = json_encode(array_values($vendas_por_categoria));
+
+// Dados para itens com menor desempenho (simplificado, você pode precisar de mais lógica)
+// Aqui, vamos considerar os pacotes que não estão no top 5 e que tiveram poucas vendas
+$itens_menor_desempenho = [];
+foreach ($vendas_por_pacote as $pacote_nome => $dados) {
+    if (!array_key_exists($pacote_nome, $top_5_pacotes) && $dados['vendas'] < 10) { // Exemplo: menos de 10 vendas
+        $itens_menor_desempenho[$pacote_nome] = $dados;
+    }
+}
+// Ordena por vendas (crescente) para mostrar os de menor desempenho primeiro
+uasort($itens_menor_desempenho, function($a, $b) {
+    return $a['vendas'] <=> $b['vendas'];
+});
+$top_5_menor_desempenho = array_slice($itens_menor_desempenho, 0, 5, true);
+
+// Para "Última Venda" e "Novos Usuários", o `compras.txt` não fornece diretamente.
+// Você precisaria de um arquivo de usuários ou um banco de dados para isso.
+// Por enquanto, manteremos os valores fictícios ou indicaremos que não há dados.
+$novos_usuarios = "N/A"; // Ou 0 se não houver dados
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -15,11 +139,11 @@
     <header class="main-header admin-header">
         <div class="container">
             <div class="logo">
-                <a href="admin-dashboard.html">GameMaxAdmin</a>
+                <a href="admin.php">GameMaxAdmin</a>
             </div>
             <nav class="main-nav admin-nav">
                 <ul>
-                    <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="admin.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="admin-products.html"><i class="fas fa-box"></i> Produtos</a></li>
                     <li><a href="admin-promotions.html"><i class="fas fa-tags"></i> Promoções</a></li>
                     <li><a href="admin-users.html"><i class="fas fa-users"></i> Usuários</a></li>
@@ -46,32 +170,32 @@
                     <div class="card-icon"><i class="fas fa-dollar-sign"></i></div>
                     <div class="card-content">
                         <h3>Receita Total (Mês)</h3>
-                        <p class="metric-value">R$ 125.450,00</p>
-                        <span class="metric-change positive"><i class="fas fa-arrow-up"></i> +12% vs. Mês Anterior</span>
+                        <p class="metric-value">R$ <?= number_format($total_receita, 2, ',', '.') ?></p>
+                        <span class="metric-change positive"><i class="fas fa-arrow-up"></i> Dados do Mês Atual</span>
                     </div>
                 </div>
                 <div class="summary-card">
                     <div class="card-icon"><i class="fas fa-shopping-cart"></i></div>
                     <div class="card-content">
-                        <h3>Vendas Realizadas</h3>
-                        <p class="metric-value">2.876</p>
-                        <span class="metric-change positive"><i class="fas fa-arrow-up"></i> +8% vs. Mês Anterior</span>
+                        <h3>Vendas Realizadas (Mês)</h3>
+                        <p class="metric-value"><?= $total_vendas ?></p>
+                        <span class="metric-change positive"><i class="fas fa-arrow-up"></i> Dados do Mês Atual</span>
                     </div>
                 </div>
                 <div class="summary-card">
                     <div class="card-icon"><i class="fas fa-users"></i></div>
                     <div class="card-content">
                         <h3>Novos Usuários</h3>
-                        <p class="metric-value">345</p>
-                        <span class="metric-change positive"><i class="fas fa-arrow-up"></i> +5% vs. Mês Anterior</span>
+                        <p class="metric-value"><?= $novos_usuarios ?></p>
+                        <span class="metric-change positive"><i class="fas fa-arrow-up"></i> (Dados não disponíveis em compras.txt)</span>
                     </div>
                 </div>
                 <div class="summary-card">
                     <div class="card-icon"><i class="fas fa-ticket-alt"></i></div>
                     <div class="card-content">
                         <h3>Ticket Médio</h3>
-                        <p class="metric-value">R$ 43,62</p>
-                        <span class="metric-change negative"><i class="fas fa-arrow-down"></i> -1% vs. Mês Anterior</span>
+                        <p class="metric-value">R$ <?= number_format($ticket_medio, 2, ',', '.') ?></p>
+                        <span class="metric-change positive"><i class="fas fa-arrow-up"></i> Mês Atual</span>
                     </div>
                 </div>
             </section>
@@ -100,11 +224,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>1</td><td>Pacote Lendário</td><td>520</td><td>R$ 54.600</td></tr>
-                            <tr><td>2</td><td>Skin Exclusiva</td><td>480</td><td>R$ 30.720</td></tr>
-                            <tr><td>3</td><td>Kit Inicial Pro</td><td>350</td><td>R$ 14.875</td></tr>
-                            <tr><td>4</td><td>Arma Épica</td><td>290</td><td>R$ 34.800</td></tr>
-                            <tr><td>5</td><td>Emote Raro</td><td>210</td><td>R$ 6.300</td></tr>
+                            <?php $i = 1; foreach ($top_5_pacotes as $pacote_nome => $dados): ?>
+                                <tr>
+                                    <td><?= $i++ ?></td>
+                                    <td><?= htmlspecialchars($pacote_nome) ?></td>
+                                    <td><?= $dados['vendas'] ?></td>
+                                    <td>R$ <?= number_format($dados['receita'], 2, ',', '.') ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            <?php if (empty($top_5_pacotes)): ?>
+                                <tr><td colspan="4">Nenhum pacote vendido ainda.</td></tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
@@ -116,16 +246,22 @@
                             <tr>
                                 <th>#</th>
                                 <th>Item</th>
-                                <th>Vendas (Mês)</th>
-                                <th>Última Venda</th>
+                                <th>Vendas (Total)</th>
+                                <th>Última Venda</th> <!-- Este dado não está em compras.txt -->
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>1</td><td>Pacote de Boost Básico</td><td>5</td><td>Há 25 dias</td></tr>
-                            <tr><td>2</td><td>Acessório de Cabeça Raro</td><td>3</td><td>Há 40 dias</td></tr>
-                            <tr><td>3</td><td>Emblema de Clã</td><td>1</td><td>Há 60 dias</td></tr>
-                            <tr><td>4</td><td>Poção de XP (Pequena)</td><td>0</td><td>Nunca</td></tr>
-                            <tr><td>5</td><td>Caixa Misteriosa Antiga</td><td>0</td><td>Nunca</td></tr>
+                            <?php $i = 1; foreach ($top_5_menor_desempenho as $item_nome => $dados): ?>
+                                <tr>
+                                    <td><?= $i++ ?></td>
+                                    <td><?= htmlspecialchars($item_nome) ?></td>
+                                    <td><?= $dados['vendas'] ?></td>
+                                    <td>N/A</td> <!-- Não disponível em compras.txt -->
+                                </tr>
+                            <?php endforeach; ?>
+                            <?php if (empty($top_5_menor_desempenho)): ?>
+                                <tr><td colspan="4">Todos os itens estão performando bem ou não há dados suficientes.</td></tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
@@ -146,7 +282,7 @@
                         <i class="fas fa-user-slash"></i>
                         <span>Gerenciar Usuários</span>
                     </a>
-                    <a href="admin-reports.html?type=finance" class="action-card">
+                    <a href="admin-reports.php" class="action-card">
                         <i class="fas fa-file-invoice-dollar"></i>
                         <span>Ver Relatórios Financeiros</span>
                     </a>
@@ -167,12 +303,12 @@
             document.querySelector('.main-nav').classList.toggle('active');
         });
 
-        // Dados para os gráficos (exemplo)
+        // Dados para os gráficos (reais do PHP)
         const dailySalesData = {
-            labels: ['Dia 1', 'Dia 2', 'Dia 3', 'Dia 4', 'Dia 5', 'Dia 6', 'Dia 7'],
+            labels: <?= $labels_vendas_diarias ?>,
             datasets: [{
                 label: 'Vendas Diárias',
-                data: [120, 190, 150, 230, 180, 250, 210],
+                data: <?= $data_vendas_diarias ?>,
                 backgroundColor: 'rgba(0, 123, 255, 0.6)',
                 borderColor: 'rgba(0, 123, 255, 1)',
                 borderWidth: 1,
@@ -181,23 +317,25 @@
         };
 
         const revenueByCategoryData = {
-            labels: ['Skins', 'Pacotes', 'Armas', 'Emotes', 'Boosts'],
+            labels: <?= $labels_receita_categoria ?>,
             datasets: [{
                 label: 'Receita por Categoria',
-                data: [40000, 35000, 25000, 10000, 5000],
+                data: <?= $data_receita_categoria ?>,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.7)',
                     'rgba(54, 162, 235, 0.7)',
                     'rgba(255, 206, 86, 0.7)',
                     'rgba(75, 192, 192, 0.7)',
-                    'rgba(153, 102, 255, 0.7)'
+                    'rgba(153, 102, 255, 0.7)',
+                    'rgba(201, 203, 207, 0.7)' // Cor para 'Outros'
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)'
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(201, 203, 207, 1)'
                 ],
                 borderWidth: 1
             }]
