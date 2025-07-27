@@ -1,1 +1,2 @@
 charlescnn2004@gmail.com,chaplin,$2y$10$TqI65XtPUeztQkj7aeMrMuCO5XHo4dq2jPC8gSXPQdvZuCvNawjua
+admin@gamemax.com,Admin,$2y$10$QHEP1ET9wo1.x3mTE59.MOB9VU1i/kPfxZvhGl3tqDLoL50/sb.Z.
