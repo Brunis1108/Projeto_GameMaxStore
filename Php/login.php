@@ -24,8 +24,8 @@
                 </ul>
             </nav>
             <div class="user-actions">
-                <a href="#login" class="btn btn-primary">Login</a>
-                <a href="regsitro.html" class="btn btn-secondary">Cadastre-se</a>
+                <a href="login.php" class="btn btn-primary">Login</a>
+                <a href="registro.php" class="btn btn-secondary">Cadastre-se</a>
                 <span class="user-balance">
                     <i class="fas fa-coins"></i> 10.000 Moedas
                 </span>
@@ -50,7 +50,7 @@
                         <input type="password" id="password" name="password" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Entrar</button>
-                    <p class="register-link">Não tem uma conta? <a href="regsitro.html">Cadastre-se</a></p>
+                    <p class="register-link">Não tem uma conta? <a href="registro.php">Cadastre-se</a></p>
                 </form>
             </div>
         </section>
