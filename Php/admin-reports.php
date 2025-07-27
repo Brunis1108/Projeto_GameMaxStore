@@ -110,21 +110,21 @@ $data_fluxo = json_encode(array_values($fluxo_por_dia));
     <header class="main-header admin-header">
         <div class="container">
             <div class="logo">
-                <a href="admin-dashboard.html">GameMaxAdmin</a>
+                <a href="admin.php">GameMaxAdmin</a>
             </div>
             <nav class="main-nav admin-nav">
                 <ul>
                     <li><a href="admin.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="admin-products.html"><i class="fas fa-box"></i> Produtos</a></li>
-                    <li><a href="admin-promotions.html"><i class="fas fa-tags"></i> Promoções</a></li>
-                    <li><a href="admin-users.html"><i class="fas fa-users"></i> Usuários</a></li>
+                    <li><a href="#"><i class="fas fa-box"></i> Produtos</a></li>
+                    <li><a href="#"><i class="fas fa-tags"></i> Promoções</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Usuários</a></li>
                     <li><a href="admin-reports.php"><i class="fas fa-chart-line"></i> Relatórios</a></li>
-                    <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Configurações</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Configurações</a></li>
                 </ul>
             </nav>
             <div class="user-actions admin-actions">
                 <span class="admin-name"><i class="fas fa-user-shield"></i> Olá, Administrador!</span>
-                <a href="login.html" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                <a href="login.php" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Sair</a>
             </div>
             <button class="menu-toggle" aria-label="Abrir Menu">
                 <i class="fas fa-bars"></i>

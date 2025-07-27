@@ -24,7 +24,7 @@
                 </ul>
             </nav>
             <div class="user-actions">
-                <a href="#" class="btn btn-primary">Login</a>
+                <a href="login.php" class="btn btn-primary">Login</a>
                 <span class="user-balance">
                     <i class="fas fa-coins"></i> 10.000 Moedas
                 </span>
