@@ -1,127 +1,207 @@
 <?php
 date_default_timezone_set('America/Sao_Paulo');
+
+// Inicializa arrays
 $compras = [];
-$dre = [
-    'Receita Bruta' => 0,
-    'Descontos' => 0,
-    'Custos' => 0,
-    'Lucro Bruto' => 0,
-    'Despesas' => 0,
-    'Lucro Líquido' => 0
-];
 $fluxo_por_dia = [];
 
-if (file_exists('compras.txt')) {
-    $linhas = file('compras.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+if (file_exists('Banco/compras.txt')) {
+    $linhas = file('Banco/compras.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
     foreach ($linhas as $linha) {
-        preg_match_all('/email:\s*(.*?)\s*\|\s*pacote:\s*(.*?)\s*\|\s*valor:\s*([\d.]+)\s*\|\s*data:\s*(.*)/', $linha, $matches);
-        if ($matches && count($matches[0]) > 0) {
-            $email = $matches[1][0];
-            $pacote = $matches[2][0];
-            $valor = floatval($matches[3][0]);
-            $data = $matches[4][0];
+        // Novo padrão de leitura para o formato atual
+        preg_match('/\[(.*?)\]\s*Pacote:\s*(.*?)\s*\|\s*Preço:\s*R\$\s*([\d,\.]+)\s*\|\s*Email:\s*(.*)/', $linha, $matches);
 
-            $compras[] = compact('email', 'pacote', 'valor', 'data');
-            $dre['Receita Bruta'] += $valor;
+        if (count($matches) === 5) {
+            $dataHora = trim($matches[1]);
+            $pacote = trim($matches[2]);
+            $valorStr = trim($matches[3]);
+            $email = trim($matches[4]);
 
-            $dia = date('Y-m-d', strtotime($data));
-            if (!isset($fluxo_por_dia[$dia])) $fluxo_por_dia[$dia] = 0;
-            $fluxo_por_dia[$dia] += $valor;
+            // Converte para float (cuidado com vírgula)
+            $valor = floatval(str_replace(',', '.', $valorStr));
+            $data = date('Y-m-d', strtotime($dataHora));
+
+            // Armazena no array de compras
+            $compras[] = compact('dataHora', 'pacote', 'valor', 'email');
+
+            // Soma por dia
+            if (!isset($fluxo_por_dia[$data])) {
+                $fluxo_por_dia[$data] = 0;
+            }
+            $fluxo_por_dia[$data] += $valor;
         }
     }
 }
 
-// Simulações
-$dre['Custos'] = $dre['Receita Bruta'] * 0.3;
-$dre['Despesas'] = $dre['Receita Bruta'] * 0.2;
-$dre['Lucro Bruto'] = $dre['Receita Bruta'] - $dre['Custos'];
-$dre['Lucro Líquido'] = $dre['Lucro Bruto'] - $dre['Despesas'];
+// Ordena o fluxo por dia para garantir que o gráfico seja exibido corretamente
+ksort($fluxo_por_dia);
+
+// Prepara os dados para o Chart.js
+$labels = json_encode(array_keys($fluxo_por_dia));
+$dataValues = json_encode(array_values($fluxo_por_dia));
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Relatórios Financeiros | GameMaxAdmin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameMaxStore - Relatórios Financeiros</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <header class="main-header admin-header">
+        <div class="container">
+            <div class="logo">
+                <a href="admin-dashboard.html">GameMaxAdmin</a>
+            </div>
+            <nav class="main-nav admin-nav">
+                <ul>
+                    <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="admin-products.html"><i class="fas fa-box"></i> Produtos</a></li>
+                    <li><a href="admin-promotions.html"><i class="fas fa-tags"></i> Promoções</a></li>
+                    <li><a href="admin-users.html"><i class="fas fa-users"></i> Usuários</a></li>
+                    <li><a href="admin-reports.php"><i class="fas fa-chart-line"></i> Relatórios</a></li>
+                    <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Configurações</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions admin-actions">
+                <span class="admin-name"><i class="fas fa-user-shield"></i> Olá, Administrador!</span>
+                <a href="login.html" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Sair</a>
+            </div>
+            <button class="menu-toggle" aria-label="Abrir Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
     <main class="admin-main">
         <div class="container">
-            <h1>📈 Relatórios Financeiros</h1>
-            <div class="report-buttons">
-                <button onclick="mostrarRelatorio('dre')">📊 DRE</button>
-                <button onclick="mostrarRelatorio('fluxo')">📈 Fluxo de Caixa</button>
-            </div>
+            <h1 class="admin-page-title"><i class="fas fa-chart-line"></i> Relatórios Financeiros</h1>
 
-            <!-- DRE -->
-            <div id="relatorio-dre" style="display: none;">
-                <h2>DRE - Resultado do Exercício</h2>
-                <canvas id="dreChart"></canvas>
-                <table border="1" cellpadding="5" style="margin-top:20px; width:100%;">
-                    <tr><th>Categoria</th><th>Valor (R$)</th></tr>
-                    <?php foreach ($dre as $categoria => $valor): ?>
-                        <tr>
-                            <td><?= $categoria ?></td>
-                            <td><?= number_format($valor, 2, ',', '.') ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </table>
-            </div>
+            <section class="admin-charts-section">
+                <div class="chart-card">
+                    <h3>📊 Fluxo de Caixa por Dia</h3>
+                    <canvas id="fluxoChart"></canvas>
+                </div>
+            </section>
 
-            <!-- Fluxo de Caixa -->
-            <div id="relatorio-fluxo" style="display: none;">
-                <h2>Fluxo de Caixa</h2>
-                <canvas id="fluxoChart"></canvas>
-                <table border="1" cellpadding="5" style="margin-top:20px; width:100%;">
-                    <tr><th>Data</th><th>Valor</th></tr>
-                    <?php foreach ($fluxo_por_dia as $dia => $valor): ?>
-                        <tr>
-                            <td><?= $dia ?></td>
-                            <td>R$ <?= number_format($valor, 2, ',', '.') ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </table>
-            </div>
+            <section class="admin-data-tables">
+                <div class="data-table-card">
+                    <h3>📋 Lista de Vendas Recentes</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Pacote</th>
+                                <th>Valor (R$)</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($compras)): ?>
+                                <tr><td colspan="4" style="text-align: center;">Nenhuma venda registrada ainda.</td></tr>
+                            <?php else: ?>
+                                <?php foreach ($compras as $compra): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($compra['dataHora']) ?></td>
+                                        <td><?= htmlspecialchars($compra['pacote']) ?></td>
+                                        <td><?= number_format($compra['valor'], 2, ',', '.') ?></td>
+                                        <td><?= htmlspecialchars($compra['email']) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </div>
     </main>
 
-    <script>
-        function mostrarRelatorio(tipo) {
-            document.getElementById('relatorio-dre').style.display = (tipo === 'dre') ? 'block' : 'none';
-            document.getElementById('relatorio-fluxo').style.display = (tipo === 'fluxo') ? 'block' : 'none';
-        }
+    <footer class="main-footer admin-footer">
+        <div class="container">
+            <p>&copy; 2023 GameMaxStore Admin. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
-        // DRE Chart
-        new Chart(document.getElementById('dreChart').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode(array_keys($dre)) ?>,
-                datasets: [{
-                    label: 'Valores em R$',
-                    data: <?= json_encode(array_values($dre)) ?>,
-                    backgroundColor: ['#3498db', '#e74c3c', '#f1c40f', '#1abc9c', '#9b59b6', '#2ecc71']
-                }]
-            },
-            options: { responsive: true }
+    <script>
+        // JavaScript para o menu responsivo (reutilizado)
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.main-nav').classList.toggle('active');
         });
 
-        // Fluxo de Caixa Chart
-        new Chart(document.getElementById('fluxoChart').getContext('2d'), {
-            type: 'line',
-            data: {
-                labels: <?= json_encode(array_keys($fluxo_por_dia)) ?>,
-                datasets: [{
-                    label: 'Entradas por Dia (R$)',
-                    data: <?= json_encode(array_values($fluxo_por_dia)) ?>,
-                    borderColor: '#2ecc71',
-                    backgroundColor: 'rgba(46,204,113,0.2)',
-                    fill: true
-                }]
-            },
-            options: { responsive: true }
+        // Dados para o gráfico de fluxo de caixa
+        const fluxoData = {
+            labels: <?= $labels ?>,
+            datasets: [{
+                label: 'Entradas (R$)',
+                data: <?= $dataValues ?>,
+                backgroundColor: 'rgba(0, 230, 118, 0.6)', // Verde vibrante do admin
+                borderColor: 'rgba(0, 230, 118, 1)',
+                borderWidth: 1,
+                fill: true,
+                tension: 0.3 // Adiciona uma leve curva à linha
+            }]
+        };
+
+        // Renderizar gráfico de fluxo de caixa
+        const ctxFluxo = document.getElementById('fluxoChart').getContext('2d');
+        new Chart(ctxFluxo, {
+            type: 'line', // Alterado para gráfico de linha para melhor visualização de tendências
+            data: fluxoData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)' // Linhas de grade mais claras
+                        },
+                        ticks: {
+                            color: 'var(--text-color-light)', // Cor do texto dos ticks
+                            callback: function(value) {
+                                return 'R$ ' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'var(--text-color-light)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: 'var(--text-color-light)'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += 'R$ ' + context.parsed.y.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
         });
     </script>
 </body>

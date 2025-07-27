@@ -41,21 +41,21 @@
             <h2><i class="fas fa-fire"></i> Produtos Disponíveis</h2>
             <div class="product-grid">
                 <div class="product-card">
-                    <img src="https://via.placeholder.com/300x200?text=Pacote+Lendario" alt="Pacote Lendário">
+                    <img src="" alt="Pacote Lendário">
                     <h3>Pacote Lendário</h3>
                     <p class="price">R$ 150,00</p>
                     <p class="coins-price">15.000 Moedas</p>
                     <button class="btn btn-buy" onclick="showLoginPrompt()">Comprar</button>
                 </div>
                 <div class="product-card">
-                    <img src="https://via.placeholder.com/300x200?text=Skin+Exclusiva" alt="Skin Exclusiva">
+                    <img src="" alt="Skin Exclusiva">
                     <h3>Skin Exclusiva</h3>
                     <p class="price">R$ 80,00</p>
                     <p class="coins-price">8.000 Moedas</p>
                     <button class="btn btn-buy" onclick="showLoginPrompt()">Comprar</button>
                 </div>
                 <div class="product-card">
-                    <img src="https://via.placeholder.com/300x200?text=Kit+Inicial" alt="Kit Inicial">
+                    <img src="" alt="Kit Inicial">
                     <h3>Kit Inicial</h3>
                     <p class="price">R$ 50,00</p>
                     <p class="coins-price">5.000 Moedas</p>

@@ -1,3 +1,5 @@
 [2025-07-26 17:05:26] Pacote: Pacote Lendário | Preço: R$ 105.00 | Email: Não informado
 [2025-07-26 17:10:38] Pacote: Kit Inicial | Preço: R$ 42.50 | Email: Não informado
 [2025-07-26 17:16:36] Pacote: Pacote Lendário | Preço: R$ 105.00 | Email: Não informado
+[2025-07-27 11:43:33] Pacote: Arma Épica | Preço: R$ 120.00 | Email: Não informado
+[2025-07-27 12:07:38] Pacote: Pacote Lendário | Preço: R$ 105.00 | Email: Não informado

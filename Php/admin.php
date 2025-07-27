@@ -15,11 +15,11 @@
     <header class="main-header admin-header">
         <div class="container">
             <div class="logo">
-                <a href="admin-dashboard.html">GameMaxAdmin</a>
+                <a href="admin.php">GameMaxAdmin</a>
             </div>
             <nav class="main-nav admin-nav">
                 <ul>
-                    <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="admin.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="admin-products.html"><i class="fas fa-box"></i> Produtos</a></li>
                     <li><a href="admin-promotions.html"><i class="fas fa-tags"></i> Promoções</a></li>
                     <li><a href="admin-users.html"><i class="fas fa-users"></i> Usuários</a></li>
