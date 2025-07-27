@@ -19,19 +19,29 @@
             </div>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="loja.php">Loja</a></li>
-                    <li><a href="#">Meus Itens</a></li>
-                    <li><a href="#">Amigos</a></li>
+                    <?php session_start(); if (isset($_SESSION['email'])): ?>
+                        <li><a href="loja.php">Loja</a></li>
+                        <li><a href="#">Meus Itens</a></li>
+                        <li><a href="#">Amigos</a></li>
+                    <?php endif; ?>
                     <li><a href="#">Suporte</a></li>
                 </ul>
             </nav>
             <div class="user-actions">
-                <a href="login.php" class="btn btn-primary">Login</a>
-                <a href="registro.php" class="btn btn-secondary">Cadastre-se</a>
-                <span class="user-balance">
-                    <i class="fas fa-coins"></i> 10.000 Moedas
-                    <a href="#">+</a>
-                </span>
+                <?php if (isset($_SESSION['email'])): ?>
+                    <span class="user-balance">
+                        <i class="fas fa-coins"></i> 10.000 Moedas
+                        <a href="#">+</a>
+                    </span>
+                    <a href="logout.php" class="btn btn-secondary">Sair</a>
+                <?php else: ?>
+                    <a href="login.php" class="btn btn-primary">Login</a>
+                    <a href="registro.php" class="btn btn-secondary">Cadastre-se</a>
+                    <span class="user-balance">
+                        <i class="fas fa-coins"></i> 10.000 Moedas
+                        <a href="#">+</a>
+                    </span>
+                <?php endif; ?>
             </div>
             <button class="menu-toggle" aria-label="Abrir Menu">
                 <i class="fas fa-bars"></i>
@@ -44,7 +54,7 @@
             <div class="container">
                 <h1>Novos Pacotes Chegaram!</h1>
                 <p>Aproveite as ofertas exclusivas e turbine sua experiência no jogo.</p>
-                <a href="loja.php" class="btn btn-call-to-action">Ver Ofertas Agora!</a>
+                <!-- Botão de loja removido da página inicial, acessível apenas após login -->
             </div>
         </section>
 
@@ -146,7 +156,7 @@
     </footer>
 
     <!-- Modal de Confirmação -->
-    <div id="modal-confirmacao" class="modal"> <!-- Remova a classe 'hidden' daqui -->
+    <div id="modal-confirmacao" class="modal">
         <div class="modal-content">
             <h2>Confirmar Compra</h2>
             <p id="mensagem-modal"></p>
@@ -174,11 +184,19 @@
         document.querySelectorAll('.btn-buy').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
+
+                // Verifica se o usuário está logado
+                <?php if (!isset($_SESSION['email'])): ?>
+                    alert('Você precisa estar logado para realizar uma compra!');
+                    window.location.href = 'login.php'; // Redireciona para a página de login
+                    return;
+                <?php endif; ?>
+
                 // Pega dados do item
                 dadosCompra = {
                     pacote: this.dataset.pacote,
                     preco: this.dataset.preco,
-                    email: this.dataset.email || ''
+                    email: '<?php echo isset($_SESSION['email']) ? $_SESSION['email'] : ''; ?>'
                 };
 
                 // Atualiza mensagem e abre modal
