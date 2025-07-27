@@ -61,7 +61,7 @@
                         <p class="coins-price">10.500 Moedas</p>
                     </div>
 
-                    <a href="#" class="btn btn-buy">Comprar</a>
+                    <a href="#" class="btn btn-buy" data-pacote="Pacote Lendário Hall Of Legends 2025 Uzi" data-preco="105,00">Comprar</a>
                 </div>
 
                 <div class="product-card promotion">
@@ -113,7 +113,7 @@
                         <p class="price">R$ 30,00</p>
                         <p class="coins-price">3.000 Moedas</p>
                     </div>
-                    
+
                     <a href="#" class="btn btn-buy" data-pacote="Emote Raro" data-preco="30.00">Comprar</a>
                 </div>
                 <div class="product-card">
@@ -145,40 +145,68 @@
         </div>
     </footer>
 
+    <!-- Modal de Confirmação -->
+    <div id="modal-confirmacao" class="modal"> <!-- Remova a classe 'hidden' daqui -->
+        <div class="modal-content">
+            <h2>Confirmar Compra</h2>
+            <p id="mensagem-modal"></p>
+            <div class="modal-actions">
+                <button id="btn-confirmar" class="btn btn-primary">Confirmar</button>
+                <button id="btn-cancelar" class="btn btn-secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // JavaScript para o menu responsivo (exemplo simples)
         document.querySelector('.menu-toggle').addEventListener('click', function() {
             document.querySelector('.main-nav').classList.toggle('active');
         });
-    </script>
-    <script>
+
+
+        let dadosCompra = {};
+        const modal = document.getElementById('modal-confirmacao');
+        const mensagem = document.getElementById('mensagem-modal');
+        const btnConfirmar = document.getElementById('btn-confirmar');
+        const btnCancelar = document.getElementById('btn-cancelar');
+
+        // Ao clicar em qualquer botão de comprar
         document.querySelectorAll('.btn-buy').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
+                // Pega dados do item
+                dadosCompra = {
+                    pacote: this.dataset.pacote,
+                    preco: this.dataset.preco,
+                    email: this.dataset.email || ''
+                };
 
-                const pacote = this.dataset.pacote;
-                const preco = this.dataset.preco;
-                let email = this.dataset.email || '';
-
-                const confirmacao = confirm(`Certeza que deseja comprar o pacote "${pacote}" por R$ ${preco}?`);
-
-                if (confirmacao) {
-                    fetch('registrar_compra.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                            },
-                            body: new URLSearchParams({
-                                pacote: pacote,
-                                preco: preco,
-                                email: email
-                            })
-                        })
-                        .then(response => response.text())
-                        .then(msg => alert(msg))
-                        .catch(err => alert('Erro ao registrar compra.'));
-                }
+                // Atualiza mensagem e abre modal
+                mensagem.textContent = `Deseja realmente comprar o pacote "${dadosCompra.pacote}" por R$ ${dadosCompra.preco}?`;
+                modal.classList.add('active'); // Adiciona a classe 'active' para mostrar o modal
             });
+        });
+
+        // Cancelar compra
+        btnCancelar.addEventListener('click', () => {
+            modal.classList.remove('active'); // Remove a classe 'active' para esconder o modal
+            dadosCompra = {};
+        });
+
+        // Confirmar compra
+        btnConfirmar.addEventListener('click', () => {
+            modal.classList.remove('active'); // Remove a classe 'active' para esconder o modal
+
+            fetch('registrar_compra.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams(dadosCompra)
+                })
+                .then(response => response.text())
+                .then(msg => alert(msg))
+                .catch(() => alert('Erro ao registrar compra.'));
         });
     </script>
 
