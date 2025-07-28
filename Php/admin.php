@@ -115,10 +115,32 @@ uasort($itens_menor_desempenho, function($a, $b) {
 });
 $top_5_menor_desempenho = array_slice($itens_menor_desempenho, 0, 5, true);
 
-// Para "Última Venda" e "Novos Usuários", o `compras.txt` não fornece diretamente.
-// Você precisaria de um arquivo de usuários ou um banco de dados para isso.
-// Por enquanto, manteremos os valores fictícios ou indicaremos que não há dados.
-$novos_usuarios = "N/A"; // Ou 0 se não houver dados
+// --- INÍCIO DA NOVA LÓGICA PARA USUÁRIOS ---
+$caminho_clientes = 'clientes.txt';
+$total_usuarios = 0;
+$ultimos_usuarios_cadastrados = []; // Para a tabela de últimos usuários
+
+if (file_exists($caminho_clientes)) {
+    $linhas_clientes = file($caminho_clientes, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $total_usuarios = count($linhas_clientes);
+
+    // Coleta os últimos 5 usuários cadastrados (assumindo que são adicionados ao final do arquivo)
+    $ultimos_5_clientes = array_slice($linhas_clientes, -5);
+    foreach ($ultimos_5_clientes as $linha_cliente) {
+        $dados_cliente = explode(',', $linha_cliente);
+        if (count($dados_cliente) >= 2) { // Garante que há pelo menos email e nickname
+            $ultimos_usuarios_cadastrados[] = [
+                'email' => htmlspecialchars($dados_cliente[0]),
+                'nickname' => htmlspecialchars($dados_cliente[1])
+            ];
+        }
+    }
+    // Inverte a ordem para mostrar o mais recente primeiro
+    $ultimos_usuarios_cadastrados = array_reverse($ultimos_usuarios_cadastrados);
+}
+
+$novos_usuarios = $total_usuarios; // Atualiza a variável para o dashboard
+// --- FIM DA NOVA LÓGICA PARA USUÁRIOS ---
 ?>
 
 
@@ -151,7 +173,7 @@ $novos_usuarios = "N/A"; // Ou 0 se não houver dados
                     <li><a href="admin.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="#"><i class="fas fa-box"></i> Produtos</a></li>
                     <li><a href="#"><i class="fas fa-tags"></i> Promoções</a></li>
-                    <li><a href="#"><i class="fas fa-users"></i> Usuários</a></li>
+                    <li><a href="admin-users.php"><i class="fas fa-users"></i> Usuários</a></li>
                     <li><a href="admin-reports.php"><i class="fas fa-chart-line"></i> Relatórios</a></li>
                     <li><a href="#"><i class="fas fa-cog"></i> Configurações</a></li>
                 </ul>
@@ -190,9 +212,9 @@ $novos_usuarios = "N/A"; // Ou 0 se não houver dados
                 <div class="summary-card">
                     <div class="card-icon"><i class="fas fa-users"></i></div>
                     <div class="card-content">
-                        <h3>Novos Usuários</h3>
-                        <p class="metric-value"><?= $novos_usuarios ?></p>
-                        <span class="metric-change positive"><i class="fas fa-arrow-up"></i> (Dados não disponíveis em compras.txt)</span>
+                        <h3>Total de Usuários</h3>
+                        <p class="metric-value"><?= $total_usuarios ?></p>
+                        <span class="metric-change positive"><i class="fas fa-arrow-up"></i> Usuários Cadastrados</span>
                     </div>
                 </div>
                 <div class="summary-card">
@@ -245,27 +267,24 @@ $novos_usuarios = "N/A"; // Ou 0 se não houver dados
                 </div>
 
                 <div class="data-table-card">
-                    <h3><i class="fas fa-frown"></i> Itens com Menor Desempenho</h3>
+                    <h3><i class="fas fa-user-plus"></i> Últimos Usuários Cadastrados</h3>
                     <table>
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Item</th>
-                                <th>Vendas (Total)</th>
-                                <th>Última Venda</th> <!-- Este dado não está em compras.txt -->
+                                <th>Nickname</th>
+                                <th>Email</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i = 1; foreach ($top_5_menor_desempenho as $item_nome => $dados): ?>
-                                <tr>
-                                    <td><?= $i++ ?></td>
-                                    <td><?= htmlspecialchars($item_nome) ?></td>
-                                    <td><?= $dados['vendas'] ?></td>
-                                    <td>N/A</td> <!-- Não disponível em compras.txt -->
-                                </tr>
-                            <?php endforeach; ?>
-                            <?php if (empty($top_5_menor_desempenho)): ?>
-                                <tr><td colspan="4">Todos os itens estão performando bem ou não há dados suficientes.</td></tr>
+                            <?php if (!empty($ultimos_usuarios_cadastrados)): ?>
+                                <?php foreach ($ultimos_usuarios_cadastrados as $usuario): ?>
+                                    <tr>
+                                        <td><?= $usuario['nickname'] ?></td>
+                                        <td><?= $usuario['email'] ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr><td colspan="2">Nenhum usuário cadastrado ainda.</td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
@@ -283,7 +302,7 @@ $novos_usuarios = "N/A"; // Ou 0 se não houver dados
                         <i class="fas fa-gift"></i>
                         <span>Criar Nova Promoção</span>
                     </a>
-                    <a href="#" class="action-card">
+                    <a href="admin-users.php" class="action-card">
                         <i class="fas fa-user-slash"></i>
                         <span>Gerenciar Usuários</span>
                     </a>

@@ -68,7 +68,7 @@ function salvarDadosUsuario($usuario) {
 
 $saldo_moedas = 0; // Valor padrão para não logado
 $notificacoes_presente = [];
-
+date_default_timezone_set('America/Sao_Paulo');
 if (isset($_SESSION['email'])) {
     $usuario_logado = carregarDadosUsuario($_SESSION['email']);
     if ($usuario_logado) {

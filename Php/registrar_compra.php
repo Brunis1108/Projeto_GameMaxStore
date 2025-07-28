@@ -105,6 +105,7 @@ for ($i = 0; $i < $quantidade; $i++) {
 // Salvar dados atualizados do usuário
 salvarDadosUsuario($usuario_logado);
 
+date_default_timezone_set('America/Sao_Paulo');
 // Registrar a compra no arquivo de compras (para relatórios administrativos)
 $log_file = 'Banco/compras.txt'; // Certifique-se de que a pasta Banco existe
 $data_hora = date('Y-m-d H:i:s');

@@ -48,6 +48,7 @@ $data_fluxo = json_encode(array_values($fluxo_por_dia));
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -81,7 +82,8 @@ $data_fluxo = json_encode(array_values($fluxo_por_dia));
             width: 100%;
             border-collapse: collapse;
             color: var(--text-color-light);
-            min-width: 600px; /* Garante largura mínima para a tabela */
+            min-width: 600px;
+            /* Garante largura mínima para a tabela */
         }
 
         .sales-table-container th,
@@ -104,8 +106,16 @@ $data_fluxo = json_encode(array_values($fluxo_por_dia));
         .sales-table-container tbody tr:hover {
             background-color: #333;
         }
+
+        .chart-card {
+            color: white;
+            /* Ou ajuste o valor conforme necessário */
+            padding-bottom: 50px;
+            /* Alternativa ou adicional */
+        }
     </style>
 </head>
+
 <body>
     <header class="main-header admin-header">
         <div class="container">
@@ -215,7 +225,7 @@ $data_fluxo = json_encode(array_values($fluxo_por_dia));
                             color: 'rgba(255, 255, 255, 0.1)'
                         },
                         ticks: {
-                            color: 'var(--text-color-light)'
+                            color:'#ffffff'
                         }
                     },
                     x: {
@@ -223,7 +233,7 @@ $data_fluxo = json_encode(array_values($fluxo_por_dia));
                             color: 'rgba(255, 255, 255, 0.1)'
                         },
                         ticks: {
-                            color: 'var(--text-color-light)'
+                            color: '#ffffff'
                         }
                     }
                 },
@@ -242,7 +252,10 @@ $data_fluxo = json_encode(array_values($fluxo_por_dia));
                                     label += ': ';
                                 }
                                 if (context.parsed.y !== null) {
-                                    label += new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed.y);
+                                    label += new Intl.NumberFormat('pt-BR', {
+                                        style: 'currency',
+                                        currency: 'BRL'
+                                    }).format(context.parsed.y);
                                 }
                                 return label;
                             }
@@ -253,4 +266,5 @@ $data_fluxo = json_encode(array_values($fluxo_por_dia));
         });
     </script>
 </body>
+
 </html>

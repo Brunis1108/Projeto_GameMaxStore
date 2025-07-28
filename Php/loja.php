@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Redirecionar para a página de login se o usuário não estiver logado
 if (!isset($_SESSION['email'])) {
     header("Location: login.php");
     exit;
@@ -72,14 +71,48 @@ function salvarDadosUsuario($usuario) {
     file_put_contents($clientes_file, implode(PHP_EOL, $linhas) . PHP_EOL);
 }
 
-$saldo_moedas = 0;
-if (isset($_SESSION['email'])) {
+// Processar compra se o formulário foi submetido
+$mensagem_compra = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comprar'])) {
+    $pacote = $_POST['pacote'];
+    $preco = floatval($_POST['preco']);
+    $moedas = intval($_POST['moedas']);
+    $quantidade = intval($_POST['quantidade']);
+    
     $usuario_logado = carregarDadosUsuario($_SESSION['email']);
-    if ($usuario_logado) {
-        $saldo_moedas = $usuario_logado['saldo_moedas'];
+    
+    $total_moedas = $moedas * $quantidade;
+    $total_preco = $preco * $quantidade;
+    
+    if ($usuario_logado['saldo_moedas'] >= $total_moedas) {
+        // Deduzir moedas
+        $usuario_logado['saldo_moedas'] -= $total_moedas;
+        
+        // Adicionar item(s) ao inventário
+        for ($i = 0; $i < $quantidade; $i++) {
+            $usuario_logado['itens_comprados'][] = $pacote . ':' . $preco;
+        }
+        
+        // Salvar dados
+        salvarDadosUsuario($usuario_logado);
+        date_default_timezone_set('America/Sao_Paulo');
+        // Registrar a compra
+        $log_file = 'Banco/compras.txt';
+        $data_hora = date('Y-m-d H:i:s');
+        $log_entry = "[$data_hora] Pacote: $pacote | Preço: R$ " . number_format($total_preco, 2, ',', '.') . 
+                     " | Quantidade: $quantidade | Email: {$_SESSION['email']}\n";
+        file_put_contents($log_file, $log_entry, FILE_APPEND);
+        
+        $mensagem_compra = "Compra de {$quantidade}x '{$pacote}' realizada com sucesso!";
+    } else {
+        $mensagem_compra = "Você não tem moedas suficientes para esta compra!";
     }
 }
+
+$usuario_logado = carregarDadosUsuario($_SESSION['email']);
+$saldo_moedas = $usuario_logado['saldo_moedas'];
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -90,8 +123,47 @@ if (isset($_SESSION['email'])) {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../css/loja.css">
+    <style>
+        /* Estilo para a mensagem igual ao do index.php */
+        .message-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            animation: slideIn 0.5s, fadeOut 0.5s 2.5s forwards;
+        }
+        
+        .message-popup.success {
+            background-color: #4CAF50;
+        }
+        
+        .message-popup.error {
+            background-color: #f44336;
+        }
+        
+        @keyframes slideIn {
+            from { right: -300px; opacity: 0; }
+            to { right: 20px; opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
 </head>
 <body>
+    <?php if ($mensagem_compra): ?>
+        <div class="message-popup <?= strpos($mensagem_compra, 'sucesso') !== false ? 'success' : 'error' ?>">
+            <?= $mensagem_compra ?>
+        </div>
+    <?php endif; ?>
+
     <header class="main-header">
         <div class="container">
             <div class="logo">
@@ -107,7 +179,7 @@ if (isset($_SESSION['email'])) {
             </nav>
             <div class="user-actions">
                 <span class="user-balance">
-                    <i class="fas fa-coins"></i> <span id="user-coins"><?= number_format($saldo_moedas, 0, ',', '.') ?></span> Moedas
+                    <i class="fas fa-coins"></i> <?= number_format($saldo_moedas, 0, ',', '.') ?> Moedas
                     <a href="comprar_moedas.php">+</a>
                 </span>
                 <a href="usuario.php" class="btn btn-secondary">
@@ -124,195 +196,157 @@ if (isset($_SESSION['email'])) {
         <section class="promotions-section container">
             <h2><i class="fas fa-fire"></i> Produtos Disponíveis</h2>
             <div class="product-grid">
-                <div class="product-card">
-                    <img src="../img/pacote_lendario.png" alt="Pacote Lendário">
-                    <div class="product-info">
-                        <h3>Pacote Lendário</h3>
-                        <p class="price">R$ 150,00</p>
-                        <p class="coins-price">15.000 Moedas</p>
+                <!-- Produto 1 -->
+                <form method="POST" class="product-card">
+                    <img src="../img/yunara.jpg" alt="Yunara">
+                    <h3>Nova Campeã: Yunara, a fé inabalável</h3>
+                    <p class="price">R$ 20,00</p>
+                    <p class="coins-price">2.000 Moedas</p>
+                    <input type="hidden" name="pacote" value="Nova Campeã: Yunara, a fé inabalável">
+                    <input type="hidden" name="preco" value="20.00">
+                    <input type="hidden" name="moedas" value="2000">
+                    <div class="form-group">
+                        <label for="quantidade1">Quantidade:</label>
+                        <input type="number" id="quantidade1" name="quantidade" value="1" min="1">
                     </div>
-                    <a href="#" class="btn btn-buy" data-pacote="Pacote Lendário" data-preco="150.00" data-moedas="15000">Comprar</a>
-                </div>
-                <div class="product-card">
-                    <img src="../img/skin.jpg" alt="Skin Exclusiva">
-                    <div class="product-info">
-                        <h3>Skin Exclusiva</h3>
-                        <p class="price">R$ 80,00</p>
-                        <p class="coins-price">8.000 Moedas</p>
+                    <button type="submit" name="comprar" class="btn btn-primary">Comprar</button>
+                </form>
+
+                <!-- Produto 2 -->
+                <form method="POST" class="product-card">
+                    <img src="../img/mel.jpg" alt="Skin Exclusiva">
+                    <h3>Campeã Mel, o reflexo da alma</h3>
+                    <p class="price">R$ 20,00</p>
+                    <p class="coins-price">2.000 Moedas</p>
+                    <input type="hidden" name="pacote" value="Campeã Mel, o reflexo da alma">
+                    <input type="hidden" name="preco" value="20.00">
+                    <input type="hidden" name="moedas" value="2000">
+                    <div class="form-group">
+                        <label for="quantidade2">Quantidade:</label>
+                        <input type="number" id="quantidade2" name="quantidade" value="1" min="1">
                     </div>
-                    <a href="#" class="btn btn-buy" data-pacote="Skin Exclusiva" data-preco="80.00" data-moedas="8000">Comprar</a>
-                </div>
-                <div class="product-card">
-                    <img src="../img/kit_inicial.png" alt="Kit Inicial">
-                    <div class="product-info">
-                        <h3>Kit Inicial</h3>
-                        <p class="price">R$ 50,00</p>
-                        <p class="coins-price">5.000 Moedas</p>
+                    <button type="submit" name="comprar" class="btn btn-primary">Comprar</button>
+                </form>
+
+                <!-- Produto 3 -->
+                <form method="POST" class="product-card">
+                    <img src="../img/aurora.jpg" alt="Kit Inicial">
+                    <h3>Campeã Aurora, a bruxa entre mundos</h3>
+                    <p class="price">R$ 20,00</p>
+                    <p class="coins-price">2.000 Moedas</p>
+                    <input type="hidden" name="pacote" value="Campeã Aurora, a bruxa entre mundos">
+                    <input type="hidden" name="preco" value="20.00">
+                    <input type="hidden" name="moedas" value="2000">
+                    <div class="form-group">
+                        <label for="quantidade3">Quantidade:</label>
+                        <input type="number" id="quantidade3" name="quantidade" value="1" min="1">
                     </div>
-                    <a href="#" class="btn btn-buy" data-pacote="Kit Inicial" data-preco="50.00" data-moedas="5000">Comprar</a>
-                </div>
-                <div class="product-card">
-                    <img src="../img/arma.jpeg" alt="Arma Épica">
-                    <div class="product-info">
-                        <h3>Arma Épica Sakura Vandal</h3>
-                        <p class="price">R$ 120,00</p>
-                        <p class="coins-price">12.000 Moedas</p>
+                    <button type="submit" name="comprar" class="btn btn-primary">Comprar</button>
+                </form>
+
+                <!-- Produto 4 -->
+                <form method="POST" class="product-card">
+                    <img src="../img/fiddle.jpg" alt="Pacote de Moedas">
+                    <h3>Skin Épica Fiddlesticks: Lua Sangrenta</h3>
+                    <p class="price">R$ 50,00</p>
+                    <p class="coins-price">5.000 Moedas</p>
+                    <input type="hidden" name="pacote" value="Skin Épica Fiddlesticks: Lua Sangrenta">
+                    <input type="hidden" name="preco" value="50.00">
+                    <input type="hidden" name="moedas" value="5000">
+                    <div class="form-group">
+                        <label for="quantidade4">Quantidade:</label>
+                        <input type="number" id="quantidade4" name="quantidade" value="1" min="1">
                     </div>
-                    <a href="#" class="btn btn-buy" data-pacote="Arma Épica Sakura Vandal" data-preco="120.00" data-moedas="12000">Comprar</a>
-                </div>
-                <div class="product-card">
-                    <img src="../img/emote.jpeg" alt="Emote Raro">
-                    <div class="product-info">
-                        <h3>Emote Raro "Ok" Rammus</h3>
-                        <p class="price">R$ 30,00</p>
-                        <p class="coins-price">3.000 Moedas</p>
+                    <button type="submit" name="comprar" class="btn btn-primary">Comprar</button>
+                </form>
+
+                <!-- Produto 5 -->
+                <form method="POST" class="product-card">
+                    <img src="../img/naafiri.jpg" alt="Passe de Batalha">
+                    <h3>Skin Lendária Naafiri: Soul Fighter</h3>
+                    <p class="price">R$ 75,00</p>
+                    <p class="coins-price">7.500 Moedas</p>
+                    <input type="hidden" name="pacote" value="Skin Lendária Naafiri: Soul Fighter">
+                    <input type="hidden" name="preco" value="75.00">
+                    <input type="hidden" name="moedas" value="7500">
+                    <div class="form-group">
+                        <label for="quantidade5">Quantidade:</label>
+                        <input type="number" id="quantidade5" name="quantidade" value="1" min="1">
                     </div>
-                    <a href="#" class="btn btn-buy" data-pacote="Emote Raro 'Ok' Rammus" data-preco="30.00" data-moedas="3000">Comprar</a>
-                </div>
-                <div class="product-card">
-                    <img src="../img/pacote_skin.png" alt="Pacote de Skin">
-                    <div class="product-info">
-                        <h3>Pacote de Skin Luz e Escuridão - Hecarim, Kalista, Yuumi</h3>
-                        <p class="price">R$ 75,00</p>
-                        <p class="coins-price">7.500 Moedas</p>
+                    <button type="submit" name="comprar" class="btn btn-primary">Comprar</button>
+                </form>
+
+                <!-- Produto 6 -->
+                <form method="POST" class="product-card">
+                    <img src="../img/malph.png" alt="Emote Especial">
+                    <h3>Skin Base Malphite: Whatsapp</h3>
+                    <p class="price">R$ 15,00</p>
+                    <p class="coins-price">1.500 Moedas</p>
+                    <input type="hidden" name="pacote" value="Skin Base Malphite: Whatsapp">
+                    <input type="hidden" name="preco" value="15.00">
+                    <input type="hidden" name="moedas" value="1500">
+                    <div class="form-group">
+                        <label for="quantidade6">Quantidade:</label>
+                        <input type="number" id="quantidade6" name="quantidade" value="1" min="1">
                     </div>
-                    <a href="#" class="btn btn-buy" data-pacote="Pacote de Skin Luz e Escuridão - Hecarim, Kalista, Yuumi" data-preco="75.00" data-moedas="7500">Comprar</a>
-                </div>
+                    <button type="submit" name="comprar" class="btn btn-primary">Comprar</button>
+                </form>
+
+                <!-- Produto 7 -->
+                <form method="POST" class="product-card">
+                    <img src="../IMG/rp.jpg" alt="Avatar Raro">
+                    <h3>Pacote 800 Riot Points (RP)</h3>
+                    <p class="price">R$ 12,00</p>
+                    <p class="coins-price">1.200 Moedas</p>
+                    <input type="hidden" name="pacote" value="Pacote 800 Riot Points (RP)">
+                    <input type="hidden" name="preco" value="12.00">
+                    <input type="hidden" name="moedas" value="1200">
+                    <div class="form-group">
+                        <label for="quantidade7">Quantidade:</label>
+                        <input type="number" id="quantidade7" name="quantidade" value="1" min="1">
+                    </div>
+                    <button type="submit" name="comprar" class="btn btn-primary">Comprar</button>
+                </form>
+
+                <!-- Produto 8 -->
+                <form method="POST" class="product-card">
+                    <img src="../img/vr.jpg" alt="Pacote de Boost">
+                    <h3>Pacote 500 Valorant Points (VR)</h3>
+                    <p class="price">R$ 15,00</p>
+                    <p class="coins-price">1.500 Moedas</p>
+                    <input type="hidden" name="pacote" value="Pacote 500 Valorant Points (VR)">
+                    <input type="hidden" name="preco" value="15.00">
+                    <input type="hidden" name="moedas" value="1500">
+                    <div class="form-group">
+                        <label for="quantidade8">Quantidade:</label>
+                        <input type="number" id="quantidade8" name="quantidade" value="1" min="1">
+                    </div>
+                    <button type="submit" name="comprar" class="btn btn-primary">Comprar</button>
+                </form>
+
+                <!-- Produto 9 -->
+                <form method="POST" class="product-card">
+                    <img src="../IMG/wc.jpeg" alt="Bundle Exclusivo">
+                    <h3>Pacote 500 Wild Cores (WC)</h3>
+                    <p class="price">R$ 15,00</p>
+                    <p class="coins-price">1.500 Moedas</p>
+                    <input type="hidden" name="pacote" value="Pacote 500 Wild Cores (WC)">
+                    <input type="hidden" name="preco" value="15.00">
+                    <input type="hidden" name="moedas" value="1500">
+                    <div class="form-group">
+                        <label for="quantidade9">Quantidade:</label>
+                        <input type="number" id="quantidade9" name="quantidade" value="1" min="1">
+                    </div>
+                    <button type="submit" name="comprar" class="btn btn-primary">Comprar</button>
+                </form>
             </div>
         </section>
     </main>
 
     <footer class="main-footer">
         <div class="container">
-            <div class="footer-links">
-                <ul>
-                    <li><a href="#">Sobre Nós</a></li>
-                    <li><a href="#">Termos de Serviço</a></li>
-                    <li><a href="#">Política de Privacidade</a></li>
-                    <li><a href="#">FAQ</a></li>
-                </ul>
-            </div>
             <p>&copy; 2025 GameMaxStore. Todos os direitos reservados.</p>
         </div>
     </footer>
-
-    <!-- Modal de Confirmação -->
-    <div id="modal-confirmacao" class="modal">
-        <div class="modal-content">
-            <h2>Confirmar Compra</h2>
-            <p id="mensagem-modal"></p>
-            <div class="form-group">
-                <label for="quantidade-unidades">Quantidade:</label>
-                <input type="number" id="quantidade-unidades" value="1" min="1">
-            </div>
-            <p id="valor-total-compra"></p>
-            <div class="modal-actions">
-                <button id="btn-confirmar" class="btn btn-primary">Confirmar</button>
-                <button id="btn-cancelar" class="btn btn-secondary">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // JavaScript para o menu responsivo (exemplo simples)
-        document.querySelector('.menu-toggle').addEventListener('click', function() {
-            document.querySelector('.main-nav').classList.toggle('active');
-        });
-
-        let dadosCompra = {};
-        const modal = document.getElementById('modal-confirmacao');
-        const mensagem = document.getElementById('mensagem-modal');
-        const quantidadeUnidadesInput = document.getElementById('quantidade-unidades');
-        const valorTotalCompraSpan = document.getElementById('valor-total-compra');
-        const btnConfirmar = document.getElementById('btn-confirmar');
-        const btnCancelar = document.getElementById('btn-cancelar');
-        const userCoinsSpan = document.getElementById('user-coins');
-
-        // Função para atualizar o valor total da compra no modal
-        function atualizarValorTotal() {
-            const quantidade = parseInt(quantidadeUnidadesInput.value);
-            const precoUnitarioMoedas = dadosCompra.moedas;
-            const precoUnitarioReal = dadosCompra.preco;
-
-            const totalMoedas = quantidade * precoUnitarioMoedas;
-            const totalReal = quantidade * precoUnitarioReal;
-
-            valorTotalCompraSpan.textContent = `Total: ${totalMoedas.toLocaleString('pt-BR')} Moedas (R$ ${totalReal.toFixed(2).replace('.', ',')})`;
-        }
-
-        // Ao clicar em qualquer botão de comprar
-        document.querySelectorAll('.btn-buy').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // Pega dados do item
-                dadosCompra = {
-                    pacote: this.dataset.pacote,
-                    preco: parseFloat(this.dataset.preco), // Converte para número
-                    moedas: parseInt(this.dataset.moedas), // Converte para número
-                    email: '<?php echo isset($_SESSION['email']) ? $_SESSION['email'] : ''; ?>'
-                };
-
-                // Reseta a quantidade para 1 e atualiza o valor total
-                quantidadeUnidadesInput.value = 1;
-                atualizarValorTotal();
-
-                // Atualiza mensagem e abre modal
-                mensagem.textContent = `Deseja realmente comprar o pacote "${dadosCompra.pacote}"?`;
-                modal.classList.add('active'); // Adiciona a classe 'active' para mostrar o modal
-            });
-        });
-
-        // Event listener para mudanças na quantidade de unidades
-        quantidadeUnidadesInput.addEventListener('input', atualizarValorTotal);
-
-        // Cancelar compra
-        btnCancelar.addEventListener('click', () => {
-            modal.classList.remove('active'); // Remove a classe 'active' para esconder o modal
-            dadosCompra = {};
-        });
-
-        // Confirmar compra
-        btnConfirmar.addEventListener('click', () => {
-            const quantidade = parseInt(quantidadeUnidadesInput.value);
-            const saldoAtual = parseInt(userCoinsSpan.textContent.replace(/\./g, '')); // Remove pontos para converter
-            const totalMoedasNecessarias = quantidade * dadosCompra.moedas;
-
-            if (saldoAtual < totalMoedasNecessarias) {
-                alert('Você não tem moedas suficientes para esta compra!');
-                modal.classList.remove('active');
-                return;
-            }
-
-            modal.classList.remove('active'); // Remove a classe 'active' para esconder o modal
-
-            fetch('registrar_compra.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        pacote: dadosCompra.pacote,
-                        preco: dadosCompra.preco,
-                        moedas: dadosCompra.moedas,
-                        email: dadosCompra.email,
-                        quantidade: quantidade // Envia a quantidade para o backend
-                    })
-                })
-                .then(response => response.json()) // Espera JSON como resposta
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        userCoinsSpan.textContent = data.novo_saldo.toLocaleString('pt-BR'); // Atualiza o saldo na UI
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Erro ao registrar compra.');
-                });
-        });
-    </script>
 </body>
 </html>
