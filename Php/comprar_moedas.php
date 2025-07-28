@@ -6,7 +6,7 @@ if (!isset($_SESSION['email'])) {
     exit;
 }
 
-// Função para carregar dados do usuário
+// Função para carregar dados do usuário com valores padrão
 function carregarDadosUsuario($email) {
     $clientes_file = 'clientes.txt';
     if (file_exists($clientes_file)) {
@@ -15,9 +15,9 @@ function carregarDadosUsuario($email) {
             $dados = explode(',', $cliente);
             if ($dados[0] === $email) {
                 return [
-                    'email' => $dados[0],
-                    'nickname' => $dados[1],
-                    'senha_hash' => $dados[2],
+                    'email' => $dados[0] ?? '',
+                    'nickname' => $dados[1] ?? '',
+                    'senha_hash' => $dados[2] ?? '',
                     'saldo_moedas' => isset($dados[3]) ? (int)$dados[3] : 0,
                     'itens_comprados' => isset($dados[4]) && $dados[4] !== '' ? explode(';', $dados[4]) : [],
                     'amigos' => isset($dados[5]) && $dados[5] !== '' ? explode(';', $dados[5]) : [],
@@ -26,11 +26,25 @@ function carregarDadosUsuario($email) {
             }
         }
     }
-    return null;
+    // Retorna array com valores padrão se usuário não for encontrado
+    return [
+        'email' => $email,
+        'nickname' => '',
+        'senha_hash' => '',
+        'saldo_moedas' => 0,
+        'itens_comprados' => [],
+        'amigos' => [],
+        'solicitacoes_amizade' => []
+    ];
 }
 
-// Função para salvar dados do usuário
+// Função para salvar dados do usuário com verificação de arrays
 function salvarDadosUsuario($usuario) {
+    // Garante que os arrays existam
+    $usuario['itens_comprados'] = $usuario['itens_comprados'] ?? [];
+    $usuario['amigos'] = $usuario['amigos'] ?? [];
+    $usuario['solicitacoes_amizade'] = $usuario['solicitacoes_amizade'] ?? [];
+    
     $clientes_file = 'clientes.txt';
     $linhas = [];
     $encontrado = false;
@@ -41,15 +55,15 @@ function salvarDadosUsuario($usuario) {
 
     foreach ($linhas as $key => $linha) {
         $dados = explode(',', $linha);
-        if ($dados[0] === $usuario['email']) {
+        if (isset($dados[0]) && $dados[0] === $usuario['email']) {
             $linhas[$key] = implode(',', [
                 $usuario['email'],
                 $usuario['nickname'],
                 $usuario['senha_hash'],
                 $usuario['saldo_moedas'],
-                implode(';', $usuario['itens_comprados']),
-                implode(';', $usuario['amigos']),
-                implode(';', $usuario['solicitacoes_amizade'])
+                !empty($usuario['itens_comprados']) ? implode(';', $usuario['itens_comprados']) : '',
+                !empty($usuario['amigos']) ? implode(';', $usuario['amigos']) : '',
+                !empty($usuario['solicitacoes_amizade']) ? implode(';', $usuario['solicitacoes_amizade']) : ''
             ]);
             $encontrado = true;
             break;
@@ -62,21 +76,18 @@ function salvarDadosUsuario($usuario) {
             $usuario['nickname'],
             $usuario['senha_hash'],
             $usuario['saldo_moedas'],
-            implode(';', $usuario['itens_comprados']),
-            implode(';', $usuario['amigos']),
-            implode(';', $usuario['solicitacoes_amizade'])
+            !empty($usuario['itens_comprados']) ? implode(';', $usuario['itens_comprados']) : '',
+            !empty($usuario['amigos']) ? implode(';', $usuario['amigos']) : '',
+            !empty($usuario['solicitacoes_amizade']) ? implode(';', $usuario['solicitacoes_amizade']) : ''
         ]);
     }
 
     file_put_contents($clientes_file, implode(PHP_EOL, $linhas) . PHP_EOL);
 }
 
-$saldo_moedas = 0;
+// Carrega dados do usuário com valores padrão
 $usuario_logado = carregarDadosUsuario($_SESSION['email']);
-if ($usuario_logado) {
-    $saldo_moedas = $usuario_logado['saldo_moedas'];
-}
-
+$saldo_moedas = $usuario_logado['saldo_moedas'] ?? 0;
 $mensagem = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -84,20 +95,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $valor_real = floatval($_POST['valor_real'] ?? 0);
 
     if ($quantidade_moedas > 0 && $valor_real > 0) {
-        // Simular processamento de pagamento
-        // Em um ambiente real, aqui você integraria com um gateway de pagamento (Pix, Cartão, etc.)
-
-        // Adicionar moedas ao saldo do usuário
         $usuario_logado['saldo_moedas'] += $quantidade_moedas;
         salvarDadosUsuario($usuario_logado);
-
-        $mensagem = "Parabéns! Você comprou " . number_format($quantidade_moedas, 0, ',', '.') . " moedas por R$ " . number_format($valor_real, 2, ',', '.') . ". Seu novo saldo é: " . number_format($usuario_logado['saldo_moedas'], 0, ',', '.') . " moedas.";
-        $saldo_moedas = $usuario_logado['saldo_moedas']; // Atualiza o saldo para exibição
+        
+        $mensagem = "Parabéns! Você comprou " . number_format($quantidade_moedas, 0, ',', '.') . 
+                   " moedas por R$ " . number_format($valor_real, 2, ',', '.') . 
+                   ". Seu novo saldo é: " . number_format($usuario_logado['saldo_moedas'], 0, ',', '.') . " moedas.";
+        $saldo_moedas = $usuario_logado['saldo_moedas'];
     } else {
         $mensagem = "Por favor, insira uma quantidade válida de moedas.";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
