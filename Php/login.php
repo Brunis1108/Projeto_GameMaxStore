@@ -17,18 +17,13 @@
             </div>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="#">Loja</a></li>
-                    <li><a href="#">Meus Itens</a></li>
-                    <li><a href="#">Amigos</a></li>
+                    <!-- Links de navegação para usuários não logados -->
                     <li><a href="#">Suporte</a></li>
                 </ul>
             </nav>
             <div class="user-actions">
                 <a href="login.php" class="btn btn-primary">Login</a>
                 <a href="registro.php" class="btn btn-secondary">Cadastre-se</a>
-                <span class="user-balance">
-                    <i class="fas fa-coins"></i> 10.000 Moedas
-                </span>
             </div>
             <button class="menu-toggle" aria-label="Abrir Menu">
                 <i class="fas fa-bars"></i>
@@ -82,4 +77,53 @@
         });
     </script>
 </body>
-</html>
+
+<?php
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Ler dados do arquivo de clientes
+    $clientes_file = 'clientes.txt';
+    $login_successful = false;
+    $is_admin = false; // Flag para verificar se é admin
+
+    if (file_exists($clientes_file)) {
+        $clientes = file($clientes_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($clientes as $cliente) {
+            list($stored_email, $nickname, $stored_password) = explode(',', $cliente);
+            if ($stored_email === $email && password_verify($password, $stored_password)) {
+                $_SESSION['email'] = $stored_email;
+                $_SESSION['nickname'] = $nickname; // Armazenar o nickname na sessão
+
+                // Verificar se é o administrador (exemplo: email específico para admin)
+                if ($stored_email === 'admin@gamemax.com') { // Substitua pelo email do seu admin
+                    $is_admin = true;
+                }
+                $login_successful = true;
+                break;
+            }
+        }
+    }
+
+    if ($login_successful) {
+        if ($is_admin) {
+            header('Location: admin.php'); // Redirecionar para a página do admin
+        } else {
+            header('Location: index.php'); // Redirecionar para a página inicial (index.php)
+        }
+        exit;
+    } else {
+        // Se não encontrar, exibir mensagem de erro
+        echo "<script>alert('E-mail ou senha inválidos!');</script>";
+    }
+}
+?>
+<script>
+    // JavaScript para o menu responsivo (reutilizado)
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        document.querySelector('.main-nav').classList.toggle('active');
+    });
+</script>

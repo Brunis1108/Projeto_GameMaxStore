@@ -1,0 +1,175 @@
+/* amigos.css */
+
+.friends-section {
+    padding: 40px 0;
+    text-align: center;
+}
+
+.friends-section h2 {
+    font-family: var(--font-accent);
+    font-size: 2.2em;
+    color: var(--primary-color);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.friends-section h2 i {
+    color: var(--text-color-light);
+}
+
+.friends-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.menu-section {
+    background-color: var(--card-background);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: left;
+}
+
+.menu-section h3 {
+    font-family: var(--font-accent);
+    font-size: 1.8em;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-section h3 i {
+    color: var(--text-color-light);
+}
+
+.no-friends-message,
+.no-requests-message {
+    font-size: 1.1em;
+    color: var(--secondary-color);
+    margin-top: 15px;
+}
+
+.friend-list,
+.friend-request-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.friend-list li,
+.friend-request-list li {
+    background-color: #3a3a5a;
+    padding: 12px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-color-light);
+    font-size: 1.1em;
+}
+
+.friend-request-list li .request-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.friend-request-list li .btn {
+    padding: 8px 12px;
+    font-size: 0.9em;
+}
+
+.friend-request-list li .btn-accept {
+    background-color: var(--accent-color);
+}
+
+.friend-request-list li .btn-accept:hover {
+    background-color: #218838;
+}
+
+.friend-request-list li .btn-decline {
+    background-color: var(--danger-color);
+}
+
+.friend-request-list li .btn-decline:hover {
+    background-color: #c82333;
+}
+
+.search-friend-form .form-group {
+    margin-bottom: 15px;
+}
+
+.search-friend-form input[type="text"] {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: #3a3a5a;
+    color: var(--text-color-light);
+    font-size: 1em;
+}
+
+.search-friend-form input[type="text"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.search-friend-form .btn-primary {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1em;
+}
+
+.search-message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.search-message.success {
+    background-color: #28a745;
+    color: white;
+}
+
+.search-message.error {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .friends-menu {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-section {
+        padding: 20px;
+    }
+
+    .menu-section h3 {
+        font-size: 1.5em;
+    }
+
+    .friend-list li,
+    .friend-request-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .friend-request-list li .request-actions {
+        width: 100%;
+        justify-content: space-around;
+    }
+}

@@ -593,3 +593,132 @@ section h2 i {
         gap: 10px;
     }
 }
+
+/* Estilos do Modal de Confirmação */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Fundo escuro semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    /* Garante que o modal fique acima de outros elementos */
+    opacity: 0;
+    /* Inicia invisível */
+    visibility: hidden;
+    /* Inicia não interativo */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    /* Transição suave */
+}
+
+.modal.active {
+    /* Classe para mostrar o modal */
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: var(--card-background);
+    /* Fundo do card */
+    padding: 30px;
+    border-radius: 10px;
+    /* Cantos arredondados */
+    max-width: 450px;
+    /* Largura máxima para o modal */
+    width: 90%;
+    /* Ocupa 90% da largura em telas menores */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    /* Sombra para profundidade */
+    text-align: center;
+    color: var(--text-color-light);
+    /* Cor do texto */
+    border: 1px solid var(--border-color);
+    /* Borda sutil */
+    transform: translateY(-20px);
+    /* Inicia um pouco acima */
+    transition: transform 0.3s ease;
+    /* Transição para o movimento */
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+    /* Move para a posição final */
+}
+
+.modal-content h2 {
+    font-family: var(--font-accent);
+    /* Fonte de título de jogo */
+    font-size: 1.8em;
+    color: var(--primary-color);
+    /* Cor primária para o título */
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content p {
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    /* Centraliza os botões */
+    gap: 15px;
+    /* Espaçamento entre os botões */
+}
+
+/* Reutilizando estilos de botões existentes */
+.modal-actions .btn {
+    padding: 12px 25px;
+    font-size: 1em;
+    border-radius: 5px;
+    /* Mantém o border-radius padrão dos botões */
+}
+
+.modal-actions .btn-primary {
+    background-color: var(--accent-color);
+    /* Usar accent-color para o botão de confirmar (sucesso) */
+}
+
+.modal-actions .btn-primary:hover {
+    background-color: #218838;
+    /* Tom mais escuro no hover */
+}
+
+.modal-actions .btn-secondary {
+    background-color: var(--secondary-color);
+    /* Cor secundária para o botão de cancelar */
+}
+
+.modal-actions .btn-secondary:hover {
+    background-color: #5a6268;
+    /* Tom mais escuro no hover */
+}
+
+/* Responsividade para o modal */
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 20px;
+    }
+
+    .modal-content h2 {
+        font-size: 1.5em;
+    }
+
+    .modal-content p {
+        font-size: 1em;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+        /* Botões empilhados em telas muito pequenas */
+        gap: 10px;
+    }
+}

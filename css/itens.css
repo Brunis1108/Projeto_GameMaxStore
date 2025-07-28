@@ -1,0 +1,170 @@
+/* itens.css */
+
+.my-items-section {
+    padding: 40px 0;
+    text-align: center;
+}
+
+.my-items-section h2 {
+    font-family: var(--font-accent);
+    font-size: 2.2em;
+    color: var(--primary-color);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.my-items-section h2 i {
+    color: var(--text-color-light);
+}
+
+.no-items-message {
+    font-size: 1.2em;
+    color: var(--text-color-light);
+    margin-top: 30px;
+}
+
+.no-items-message a {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.item-card {
+    background-color: var(--card-background);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    padding-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.item-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.item-card .item-info {
+    padding: 15px;
+    flex-grow: 1;
+}
+
+.item-card h3 {
+    font-size: 1.5em;
+    margin: 0 0 10px;
+    color: var(--primary-color);
+}
+
+.item-card p {
+    font-size: 1em;
+    color: var(--text-color-light);
+    margin-bottom: 5px;
+}
+
+.item-card .original-price {
+    color: var(--secondary-color);
+    font-size: 0.9em;
+}
+
+.item-card .sell-price {
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.item-card .sell-price .coins-value {
+    color: #ffd700; /* Cor de ouro para moedas */
+}
+
+.item-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 15px 15px;
+}
+
+.item-actions .btn {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 0.9em;
+}
+
+.item-actions .btn-sell {
+    background-color: var(--danger-color);
+}
+
+.item-actions .btn-sell:hover {
+    background-color: #c82333;
+}
+
+.item-actions .btn-gift {
+    background-color: var(--primary-color);
+}
+
+.item-actions .btn-gift:hover {
+    background-color: #0056b3;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .item-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .item-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .item-card .item-info {
+        padding: 10px;
+    }
+
+    .item-card h3 {
+        font-size: 1.3em;
+    }
+
+    .item-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* Estilos do Modal de Presentear Amigo */
+#modal-presentear-amigo .modal-content {
+    max-width: 400px;
+}
+
+#modal-presentear-amigo select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    background-color: #3a3a5a;
+    color: var(--text-color-light);
+    font-size: 1em;
+}
+
+#modal-presentear-amigo .no-friends-message {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
