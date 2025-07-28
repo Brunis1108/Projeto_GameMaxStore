@@ -22,9 +22,7 @@
                 </nav>
                 <div class="user-actions">
                     <a href="login.php" class="btn btn-primary">Login</a>
-                    <span class="user-balance">
-                        <i class="fas fa-coins"></i> 10.000 Moedas
-                    </span>
+                    <a href="registro.php" class="btn btn-secondary">Cadastre-se</a>
                 </div>
                 <button class="menu-toggle" aria-label="Abrir Menu">
                     <i class="fas fa-bars"></i>
@@ -123,7 +121,8 @@
             echo "<script>alert('Este e-mail já está cadastrado. Por favor, use outro e-mail ou faça login.');</script>";
         } else {
             // Salvar dados no arquivo de texto
-            $user_data = "$email,$nickname," . password_hash($password, PASSWORD_DEFAULT) . "\n";
+            // Adicionando campos vazios para saldo_moedas, itens_comprados, amigos, solicitacoes_amizade
+            $user_data = "$email,$nickname," . password_hash($password, PASSWORD_DEFAULT) . ",0,,,\n";
             file_put_contents($clientes_file, $user_data, FILE_APPEND);
 
             // Redirecionar para a página de login
@@ -164,7 +163,7 @@
         if ($is_admin) {
             header('Location: admin.php'); // Redirecionar para a página do admin
         } else {
-            header('Location: usuario.php'); // Redirecionar para a página do usuário
+            header('Location: index.php'); // Redirecionar para a página do usuário
         }
         exit;
     } else {

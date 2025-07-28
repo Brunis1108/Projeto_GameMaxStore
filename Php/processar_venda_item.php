@@ -1,6 +1,11 @@
 <?php
 session_start();
-header('Content-Type: application/json'); // Define o cabeçalho para JSON
+header('Content-Type: application/json');
+
+if (!isset($_SESSION['email'])) {
+    echo json_encode(['success' => false, 'message' => 'Usuário não autenticado.']);
+    exit;
+}
 
 // Função para carregar dados do usuário
 function carregarDadosUsuario($email) {
@@ -67,53 +72,46 @@ function salvarDadosUsuario($usuario) {
     file_put_contents($clientes_file, implode(PHP_EOL, $linhas) . PHP_EOL);
 }
 
-if (!isset($_SESSION['email'])) {
-    echo json_encode(['success' => false, 'message' => 'Usuário não autenticado.']);
-    exit;
-}
+$index = intval($_POST['index'] ?? -1);
+$item_name = $_POST['item_name'] ?? '';
+$sell_price = intval($_POST['sell_price'] ?? 0);
 
-$pacote = $_POST['pacote'] ?? '';
-$preco_unitario_real = floatval($_POST['preco'] ?? 0);
-$moedas_unitario = intval($_POST['moedas'] ?? 0);
-$quantidade = intval($_POST['quantidade'] ?? 1); // Nova variável para a quantidade
-
-$email_comprador = $_SESSION['email'];
-
-$usuario_logado = carregarDadosUsuario($email_comprador);
+$usuario_logado = carregarDadosUsuario($_SESSION['email']);
 
 if (!$usuario_logado) {
     echo json_encode(['success' => false, 'message' => 'Erro: Usuário não encontrado.']);
     exit;
 }
 
-$total_moedas_necessarias = $moedas_unitario * $quantidade;
-$total_preco_real = $preco_unitario_real * $quantidade;
-
-if ($usuario_logado['saldo_moedas'] < $total_moedas_necessarias) {
-    echo json_encode(['success' => false, 'message' => 'Moedas insuficientes para esta compra.']);
+if ($index < 0 || $index >= count($usuario_logado['itens_comprados'])) {
+    echo json_encode(['success' => false, 'message' => 'Item inválido.']);
     exit;
 }
 
-// Deduzir moedas do saldo do usuário
-$usuario_logado['saldo_moedas'] -= $total_moedas_necessarias;
+// Verifica se o item no índice corresponde ao nome e preço esperado (segurança básica)
+$item_data_stored = $usuario_logado['itens_comprados'][$index];
+list($stored_item_name, $stored_item_price_real) = explode(':', $item_data_stored);
 
-// Adicionar item(ns) ao inventário do usuário
-for ($i = 0; $i < $quantidade; $i++) {
-    $usuario_logado['itens_comprados'][] = $pacote . ':' . number_format($preco_unitario_real, 2, '.', ''); // Armazena o preço unitário real
+// Recalcula o preço de venda em moedas com base no preço de compra original
+$recalculated_sell_price = intval(floatval($stored_item_price_real) / 2 * 100);
+
+if ($stored_item_name !== $item_name || $recalculated_sell_price !== $sell_price) {
+    echo json_encode(['success' => false, 'message' => 'Erro de validação do item. Tente novamente.']);
+    exit;
 }
+
+// Remover o item do inventário
+array_splice($usuario_logado['itens_comprados'], $index, 1);
+
+// Adicionar moedas ao saldo
+$usuario_logado['saldo_moedas'] += $sell_price;
 
 // Salvar dados atualizados do usuário
 salvarDadosUsuario($usuario_logado);
 
-// Registrar a compra no arquivo de compras (para relatórios administrativos)
-$log_file = 'Banco/compras.txt'; // Certifique-se de que a pasta Banco existe
-$data_hora = date('Y-m-d H:i:s');
-$log_entry = "[{$data_hora}] Pacote: {$pacote} | Preço: R$ " . number_format($total_preco_real, 2, ',', '.') . " | Quantidade: {$quantidade} | Email: {$email_comprador}" . PHP_EOL;
-file_put_contents($log_file, $log_entry, FILE_APPEND);
-
 echo json_encode([
     'success' => true,
-    'message' => "Compra de {$quantidade}x '{$pacote}' realizada com sucesso!",
+    'message' => "Item '{$item_name}' vendido com sucesso! Você recebeu {$sell_price} moedas.",
     'novo_saldo' => $usuario_logado['saldo_moedas']
 ]);
 ?>

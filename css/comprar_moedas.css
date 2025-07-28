@@ -1,0 +1,192 @@
+/* comprar_moedas.css */
+
+.buy-coins-page {
+    padding: 60px 0;
+    text-align: center;
+    background-color: var(--background-dark);
+}
+
+.buy-coins-card {
+    background-color: var(--card-background);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid var(--border-color);
+}
+
+.buy-coins-card h2 {
+    font-family: var(--font-accent);
+    font-size: 2.2em;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.buy-coins-card h2 i {
+    color: var(--text-color-light);
+}
+
+.current-balance {
+    font-size: 1.2em;
+    color: var(--text-color-light);
+    margin-bottom: 30px;
+}
+
+.current-balance span {
+    font-weight: bold;
+    color: #ffd700; /* Cor de ouro para moedas */
+}
+
+.buy-coins-form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.buy-coins-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--text-color-light);
+    font-size: 1.1em;
+}
+
+.buy-coins-form input[type="number"],
+.buy-coins-form input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: #3a3a5a;
+    color: var(--text-color-light);
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.buy-coins-form input[type="number"]:focus,
+.buy-coins-form input[type="text"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.buy-coins-form .btn-primary {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
+.coin-packages {
+    margin-top: 40px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 30px;
+}
+
+.coin-packages h3 {
+    font-family: var(--font-accent);
+    font-size: 1.8em;
+    color: var(--accent-color);
+    margin-bottom: 25px;
+}
+
+.package-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.package-card {
+    background-color: #3a3a5a;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.package-card:hover {
+    transform: translateY(-5px);
+    background-color: #4a4a6a;
+}
+
+.package-card i {
+    font-size: 2.5em;
+    color: #ffd700; /* Cor de ouro */
+}
+
+.package-card h4 {
+    font-size: 1.2em;
+    color: var(--text-color-light);
+    margin: 0;
+}
+
+.package-card p {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.package-card .discount {
+    font-size: 0.8em;
+    color: var(--accent-color);
+    font-weight: normal;
+}
+
+.message {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.message.success {
+    background-color: #28a745;
+    color: white;
+}
+
+.message.error {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .buy-coins-card {
+        padding: 30px;
+        margin: 0 20px;
+    }
+
+    .buy-coins-card h2 {
+        font-size: 1.8em;
+    }
+
+    .package-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .buy-coins-card {
+        padding: 20px;
+        margin: 0 15px;
+    }
+
+    .buy-coins-card h2 {
+        font-size: 1.5em;
+    }
+
+    .package-grid {
+        grid-template-columns: 1fr;
+    }
+}

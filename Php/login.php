@@ -24,9 +24,6 @@
             <div class="user-actions">
                 <a href="login.php" class="btn btn-primary">Login</a>
                 <a href="registro.php" class="btn btn-secondary">Cadastre-se</a>
-                <span class="user-balance">
-                    <i class="fas fa-coins"></i> 10.000 Moedas
-                </span>
             </div>
             <button class="menu-toggle" aria-label="Abrir Menu">
                 <i class="fas fa-bars"></i>
@@ -115,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($is_admin) {
             header('Location: admin.php'); // Redirecionar para a página do admin
         } else {
-            header('Location: usuario.php'); // Redirecionar para a página do usuário
+            header('Location: index.php'); // Redirecionar para a página inicial (index.php)
         }
         exit;
     } else {
